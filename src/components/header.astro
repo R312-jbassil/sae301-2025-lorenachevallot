@@ -4,7 +4,7 @@ import Connecter from "../assets/connecter.svg";
 import Panier from "../assets/panier.svg";
 ---
 
-<header class="w-full bg-white border-b border-gray-200 sticky top-0 z-50">
+<header class="w-full bg-white border-b border-gray-200 sticky top-0 z-50" id="header">
     <div class="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4">
         <!-- Mobile & Tablet & Desktop Layout -->
         <div class="flex items-center justify-between">
@@ -79,58 +79,134 @@ import Panier from "../assets/panier.svg";
                 <!-- Hamburger Menu - Mobile only -->
                 <div class="md:hidden">
                     <button
-                        class="btn btn-ghost btn-sm px-2"
+                        id="menu-toggle"
+                        class="flex flex-col gap-1 p-2 hover:opacity-70 transition-opacity"
                         aria-label="Menu"
-                        onclick="document.getElementById('mobile-menu').classList.toggle('hidden')"
+                        aria-expanded="false"
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            class="w-6 h-6"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                            ></path>
-                        </svg>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Menu - Hidden by default -->
+        <!-- Mobile Menu - Hidden by default, takes full screen -->
         <nav
             id="mobile-menu"
-            class="hidden md:hidden mt-4 pb-4 flex-col gap-3 border-t border-gray-200 pt-4"
+            class="fixed md:hidden inset-0 top-[70px] bg-white flex-col gap-0 hidden overflow-y-auto"
         >
             <a
                 href="#"
-                class="text-sm font-medium text-black hover:text-gray-600 transition-colors duration-200 px-2 py-2 rounded hover:bg-gray-100"
+                class="text-lg font-medium text-black hover:text-gray-600 transition-colors duration-200 px-6 py-4 border-b border-gray-100 hover:bg-gray-50"
             >
                 PRODUITS
             </a>
             <a
                 href="#"
-                class="text-sm font-medium text-black hover:text-gray-600 transition-colors duration-200 px-2 py-2 rounded hover:bg-gray-100"
+                class="text-lg font-medium text-black hover:text-gray-600 transition-colors duration-200 px-6 py-4 border-b border-gray-100 hover:bg-gray-50"
             >
                 MES CRÉATIONS
             </a>
             <a
                 href="#"
-                class="text-sm font-medium text-black hover:text-gray-600 transition-colors duration-200 px-2 py-2 rounded hover:bg-gray-100"
+                class="text-lg font-medium text-black hover:text-gray-600 transition-colors duration-200 px-6 py-4 border-b border-gray-100 hover:bg-gray-50"
             >
                 PERSONNALISER
             </a>
             <a
                 href="#"
-                class="text-sm font-medium text-black hover:text-gray-600 transition-colors duration-200 px-2 py-2 rounded hover:bg-gray-100"
+                class="text-lg font-medium text-black hover:text-gray-600 transition-colors duration-200 px-6 py-4 border-b border-gray-100 hover:bg-gray-50"
             >
                 AIDE
             </a>
         </nav>
     </div>
 </header>
+
+<style>
+    /* Hamburger animation */
+    .hamburger-line {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background-color: currentColor;
+        border-radius: 2px;
+        transform-origin: center;
+        transition: all 0.3s ease-in-out;
+    }
+
+    #menu-toggle[aria-expanded="true"] .hamburger-line:nth-child(1) {
+        /* Move to center (6px) then rotate for a symmetric X */
+        transform: translateY(6px) rotate(45deg);
+    }
+
+    #menu-toggle[aria-expanded="true"] .hamburger-line:nth-child(2) {
+        opacity: 0;
+    }
+
+    #menu-toggle[aria-expanded="true"] .hamburger-line:nth-child(3) {
+        /* Move to center (−6px) then rotate for a symmetric X */
+        transform: translateY(-6px) rotate(-45deg);
+    }
+
+    /* Mobile menu animation */
+    #mobile-menu {
+        display: flex;
+    }
+
+    #mobile-menu.hidden {
+        display: none;
+    }
+
+    #mobile-menu {
+        animation: slideIn 0.3s ease-in-out forwards;
+    }
+
+    #mobile-menu.hidden {
+        animation: slideOut 0.3s ease-in-out forwards;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideOut {
+        from {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+    }
+</style>
+
+<script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    menuToggle?.addEventListener('click', () => {
+        const isOpen = menuToggle.getAttribute('aria-expanded') === 'true';
+        menuToggle.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+        mobileMenu?.classList.toggle('hidden');
+    });
+
+    // Fermer le menu quand on clique sur un lien
+    const menuLinks = mobileMenu?.querySelectorAll('a');
+    menuLinks?.forEach((link) => {
+        link.addEventListener('click', () => {
+            menuToggle.setAttribute('aria-expanded', 'false');
+            mobileMenu?.classList.add('hidden');
+        });
+    });
+</script>
