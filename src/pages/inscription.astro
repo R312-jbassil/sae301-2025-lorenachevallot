@@ -7,7 +7,9 @@ import Google from "../assets/google.svg";
     <main
         class="min-h-[70vh] flex items-start md:items-center justify-center py-10 md:py-16 lg:py-20"
     >
-        <div class="w-full max-w-sm md:max-w-md lg:max-w-lg px-4 mt-12 md:mt-16 lg:mt-20 mb-24 md:mb-32 lg:mb-40">
+        <div
+            class="w-full max-w-sm md:max-w-md lg:max-w-lg px-4 mt-12 md:mt-16 lg:mt-20 mb-24 md:mb-32 lg:mb-40"
+        >
             <div class="text-center">
                 <h1 class="text-3xl md:text-4xl font-normal text-base-content">
                     Inscription
@@ -17,7 +19,7 @@ import Google from "../assets/google.svg";
                 </p>
             </div>
 
-            <form action="#" method="post" class="mt-8 space-y-4 md:space-y-5">
+            <form id="registerForm" class="mt-8 space-y-4 md:space-y-5">
                 <div class="form-control">
                     <label for="email" class="label">
                         <span class="label-text">Adresse email</span>
@@ -28,6 +30,34 @@ import Google from "../assets/google.svg";
                         type="email"
                         placeholder="votremail@exemple.com"
                         autocomplete="email"
+                        required
+                        class="input input-bordered w-full"
+                    />
+                </div>
+
+                <div class="form-control">
+                    <label for="prenom" class="label">
+                        <span class="label-text">Prénom</span>
+                    </label>
+                    <input
+                        id="prenom"
+                        name="prenom"
+                        type="text"
+                        placeholder="Votre prénom"
+                        required
+                        class="input input-bordered w-full"
+                    />
+                </div>
+
+                <div class="form-control">
+                    <label for="nom" class="label">
+                        <span class="label-text">Nom</span>
+                    </label>
+                    <input
+                        id="nom"
+                        name="nom"
+                        type="text"
+                        placeholder="Votre nom"
                         required
                         class="input input-bordered w-full"
                     />
@@ -49,14 +79,14 @@ import Google from "../assets/google.svg";
                 </div>
 
                 <div class="form-control">
-                    <label for="password-confirm" class="label">
+                    <label for="passwordConfirm" class="label">
                         <span class="label-text"
                             >Confirmez votre mot de passe</span
                         >
                     </label>
                     <input
-                        id="password-confirm"
-                        name="password-confirm"
+                        id="passwordConfirm"
+                        name="passwordConfirm"
                         type="password"
                         placeholder="Entrez votre mot de passe"
                         autocomplete="new-password"
@@ -98,17 +128,23 @@ import Google from "../assets/google.svg";
 
                 <button
                     type="submit"
-                    class="btn btn-primary btn-block hover:bg-black! hover:text-white!"
+                    class="btn btn-lg btn-block bg-black text-white hover:bg-black/90 border-0"
                     >S'inscrire</button
                 >
 
                 <div class="divider text-xs md:text-sm">Ou</div>
 
-                <button type="button" class="btn btn-outline btn-block gap-2">
+                <button
+                    type="button"
+                    id="googleregister"
+                    class="btn btn-outline btn-block gap-2"
+                >
                     <img src={Google.src} alt="Google" class="h-5 w-5" />
                     Continuer avec Google
                 </button>
             </form>
+
+            <div id="msg" class="mt-4 text-center text-sm text-error"></div>
 
             <p class="mt-8 text-center text-sm text-base-content">
                 Vous avez déjà un compte ?
@@ -124,3 +160,196 @@ import Google from "../assets/google.svg";
         </div>
     </main>
 </Layout>
+
+<script type="module">
+    import PocketBase from "https://cdn.jsdelivr.net/npm/pocketbase@latest/dist/pocketbase.es.mjs";
+
+    const pb = new PocketBase("http://127.0.0.1:8090");
+
+    // Fonction pour enregistrer les cookies
+    function setCookie(name, value, days = 7) {
+        const date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        const expires = "expires=" + date.toUTCString();
+        document.cookie =
+            name + "=" + encodeURIComponent(value) + ";" + expires + ";path=/";
+    }
+
+    // Fonction pour déterminer la URL de redirection
+    function getRedirectUrl() {
+        // Récupère l'URL du document référent
+        const referrer = document.referrer;
+
+        // Vérifiez si l'utilisateur vient de la page de connexion ou d'inscription
+        if (
+            referrer.includes("/connexion") ||
+            referrer.includes("/inscription")
+        ) {
+            return "/";
+        }
+
+        // Si le referrer est vide ou du même domaine, rediriger vers /configurateur
+        if (referrer === "" || !referrer) {
+            return "/configurateur";
+        }
+
+        // Extrait le chemin du referrer
+        try {
+            const referrerUrl = new URL(referrer);
+            const path = referrerUrl.pathname;
+
+            // Si le chemin n'est pas /connexion ou /inscription, rediriger vers ce chemin
+            if (
+                !path.includes("/connexion") &&
+                !path.includes("/inscription")
+            ) {
+                return path;
+            }
+        } catch (e) {
+            console.error("Erreur lors du parsing du referrer:", e);
+        }
+
+        return "/configurateur";
+    }
+
+    const form = document.getElementById("registerForm");
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const prenom = document.getElementById("prenom").value;
+        const nom = document.getElementById("nom").value;
+        const password = document.getElementById("password").value;
+        const passwordConfirm =
+            document.getElementById("passwordConfirm").value;
+
+        try {
+            // Vérifier que les mots de passe correspondent
+            if (password !== passwordConfirm) {
+                document.getElementById("msg").textContent =
+                    "Les mots de passe ne correspondent pas";
+                document.getElementById("msg").classList.remove("text-error");
+                document.getElementById("msg").classList.add("text-error");
+                return;
+            }
+
+            // Vérifier que le mot de passe a au moins 8 caractères
+            if (password.length < 8) {
+                document.getElementById("msg").textContent =
+                    "Le mot de passe doit contenir au moins 8 caractères";
+                document.getElementById("msg").classList.remove("text-error");
+                document.getElementById("msg").classList.add("text-error");
+                return;
+            }
+
+            console.log("Tentative d'inscription avec:", {
+                email,
+                prenom,
+                nom,
+                password: "***",
+            });
+
+            // Création utilisateur via l'API publique
+            // Note: Pour les collections d'authentification, on ne peut envoyer que email/password/passwordConfirm
+            const userData = await pb.collection("utilisateur").create({
+                email: email,
+                prenom: prenom,
+                nom: nom,
+                password: password,
+                passwordConfirm: passwordConfirm,
+            });
+
+            console.log("Utilisateur créé:", userData);
+
+            // Envoi email de vérification
+            try {
+                await pb.collection("utilisateur").requestVerification(email);
+                console.log("Email de vérification envoyé");
+            } catch (emailErr) {
+                console.warn(
+                    "Erreur lors de l'envoi de l'email de vérification:",
+                    emailErr,
+                );
+            }
+
+            // Optionnel : enregistrez si vous cochez "Se souvenir de moi"
+            if (document.getElementById("remember").checked) {
+                setCookie("pb_remember_me", "true", 30); // 30 jours
+            }
+
+            document.getElementById("msg").textContent =
+                "Inscription réussie, vérifiez vos emails pour confirmer votre compte";
+            document.getElementById("msg").classList.remove("text-error");
+            document.getElementById("msg").classList.add("text-success");
+
+            // Redirection après 2 secondes
+            setTimeout(() => {
+                location.href = "/connexion";
+            }, 2000);
+        } catch (err) {
+            console.error("Erreur complète:", err);
+            console.error("Status:", err.status);
+            console.error("Data:", err.data);
+            console.error("Message:", err.message);
+
+            let errorMsg = "Échec de l'inscription";
+
+            if (err.data) {
+                // Afficher tous les erreurs de validation
+                console.error(
+                    "Erreurs de validation complètes:",
+                    JSON.stringify(err.data, null, 2),
+                );
+
+                if (err.data.email) {
+                    errorMsg = `Email: ${err.data.email.message || err.data.email}`;
+                } else if (err.data.password) {
+                    errorMsg = `Mot de passe: ${err.data.password.message || err.data.password}`;
+                } else if (err.data.message) {
+                    errorMsg = err.data.message;
+                } else {
+                    // Récupérer le premier message d'erreur
+                    for (const key in err.data) {
+                        if (err.data[key].message) {
+                            errorMsg = `${key}: ${err.data[key].message}`;
+                            break;
+                        }
+                    }
+                }
+            } else if (err.message) {
+                errorMsg = err.message;
+            }
+
+            document.getElementById("msg").textContent = errorMsg;
+            document.getElementById("msg").classList.add("text-error");
+        }
+    };
+
+    const googleregister = document.getElementById("googleregister");
+    googleregister.onclick = async () => {
+        try {
+            const authData = await pb
+                .collection("utilisateur")
+                .authWithOAuth2({ provider: "google" });
+
+            // Enregistrez les informations de connexion dans les cookies
+            setCookie("pb_token", pb.authStore.token);
+            setCookie("pb_user_id", pb.authStore.model.id);
+            setCookie("pb_user_email", pb.authStore.model.email);
+            setCookie(
+                "pb_user_name",
+                pb.authStore.model.username || pb.authStore.model.email,
+            );
+
+            // Optionnel : enregistrez si vous cochez "Se souvenir de moi"
+            if (document.getElementById("remember").checked) {
+                setCookie("pb_remember_me", "true", 30); // 30 jours
+            }
+
+            location.href = getRedirectUrl();
+        } catch (err) {
+            document.getElementById("msg").textContent =
+                "Échec de l'inscription avec Google";
+            console.error(err);
+        }
+    };
+</script>

@@ -71,20 +71,20 @@ import Panier from "../assets/panier.svg";
                 <a
                     href="/connexion"
                     id="connexion-link"
-                    class="hover:opacity-70 transition-opacity duration-200"
+                    class="hover:text-primary transition-colors duration-200"
                     aria-label="Connexion"
                 >
                     <img
                         src={Connecter.src}
                         alt="Connecter"
-                        class="h-5 md:h-6 w-auto"
+                        class="h-5 md:h-6 w-auto hover:invert-[0.2] transition-all duration-200"
                     />
                 </a>
 
                 <!-- Deconnexion Button (hidden by default) -->
                 <button
                     id="deconnexion-btn"
-                    class="hover:opacity-70 transition-opacity duration-200 px-4 py-2 bg-red-500 text-white rounded-md text-sm font-medium hidden"
+                    class="btn btn-md bg-black text-white hover:bg-black/90 border-0 hidden"
                     aria-label="Déconnexion"
                 >
                     Déconnexion
@@ -234,14 +234,18 @@ import Panier from "../assets/panier.svg";
     // Handle deconnexion
     deconnexionBtn?.addEventListener("click", async () => {
         // Clear auth cookies
-        document.cookie = "pb_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-        document.cookie = "pb_user_id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-        document.cookie = "pb_user_email=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-        document.cookie = "pb_user_name=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-        
+        document.cookie =
+            "pb_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+        document.cookie =
+            "pb_user_id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+        document.cookie =
+            "pb_user_email=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+        document.cookie =
+            "pb_user_name=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+
         // Update UI
         initializeAuthUI();
-        
+
         // Redirect to home page
         window.location.href = "/";
     });
