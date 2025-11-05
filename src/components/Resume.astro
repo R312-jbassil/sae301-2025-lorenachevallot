@@ -309,12 +309,37 @@
             try {
                 await saveToPocketBase(name);
                 saveBtn.textContent = "✓ Sauvegardé!";
+                // Afficher un message de succès
+                const msg = document.createElement("div");
+                msg.className = "alert alert-success mt-4";
+                msg.textContent = `Configuration "${name}" sauvegardée avec succès!`;
+                saveBtn.parentElement?.appendChild(msg);
+                setTimeout(() => {
+                    msg.remove();
+                }, 3000);
+
                 setTimeout(() => {
                     saveBtn.textContent = originalText;
                     saveBtn.removeAttribute("disabled");
                 }, 2000);
             } catch (error) {
-                alert("Erreur lors de la sauvegarde: " + error);
+                console.error("Erreur complète:", error);
+                const errorMsg =
+                    error instanceof Error ? error.message : String(error);
+
+                // Afficher un message d'erreur structuré
+                const msg = document.createElement("div");
+                msg.className = "alert alert-error mt-4";
+                msg.innerHTML = `<div class="flex flex-col gap-2">
+                    <strong>Erreur lors de la sauvegarde:</strong>
+                    <p>${errorMsg}</p>
+                    ${error instanceof Error && error.cause ? `<p class="text-sm opacity-75">${error.cause}</p>` : ""}
+                </div>`;
+                saveBtn.parentElement?.appendChild(msg);
+                setTimeout(() => {
+                    msg.remove();
+                }, 5000);
+
                 saveBtn.textContent = originalText;
                 saveBtn.removeAttribute("disabled");
             }
