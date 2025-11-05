@@ -155,6 +155,8 @@ const materials = {
         </div>
 
         <script>
+            import { updateMaterialaux } from "../lib/configuratorStore";
+
             const montureButton = document.getElementById(
                 "monture-button",
             ) as HTMLElement;
@@ -181,13 +183,13 @@ const materials = {
                 const branchesSpan =
                     branchesButton?.querySelector("span:first-child");
 
-                const event = new CustomEvent("materialsChange", {
-                    detail: {
-                        montureType: montureSpan?.textContent || "",
-                        branchesType: branchesSpan?.textContent || "",
-                    },
+                const montureType = montureSpan?.textContent || "";
+                const branchesType = branchesSpan?.textContent || "";
+
+                updateMaterialaux({
+                    montureType,
+                    branchesType,
                 });
-                document.dispatchEvent(event);
             }
 
             montureOptions.forEach((option) => {

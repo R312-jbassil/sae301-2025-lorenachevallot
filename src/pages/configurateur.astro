@@ -1,12 +1,13 @@
 ---
-import Tailles from "../components/tailles.astro";
-import Options from "../components/options.astro";
+import Tailles from "../components/Tailles.astro";
+import Options from "../components/Options.astro";
 import Layout from "../layouts/Layout.astro";
-import Materiaux from "../components/materiaux.astro";
-import Finitions from "../components/finitions.astro";
-import Couleurs from "../components/couleurs.astro";
-import Ia from "../components/ia.astro";
-import Resume from "../components/resume.astro";
+import Materiaux from "../components/Materiaux.astro";
+import Finitions from "../components/Finitions.astro";
+import Couleurs from "../components/Couleurs.astro";
+import Ia from "../components/Ia.astro";
+import Visualisation from "../components/Visualisation.astro";
+import Resume from "../components/Resume.astro";
 ---
 
 <Layout>
@@ -123,13 +124,54 @@ import Resume from "../components/resume.astro";
                     <Tailles />
                     <Finitions />
                     <Options />
+                    <button
+                        id="reset-btn"
+                        class="btn btn-outline btn-ghost rounded-xl h-10 text-sm font-medium border-gray-300 w-full"
+                    >
+                        <svg
+                            class="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                            ></path>
+                        </svg>
+                        Réinitialiser les modifications
+                    </button>
                 </div>
 
                 <!-- Colonne droite : Resume -->
-                <div>
+                <div class="flex flex-col gap-6 sticky-column">
+                    <Visualisation />
                     <Resume />
                 </div>
             </div>
         </div>
     </div>
 </Layout>
+
+<script>
+    import { resetConfigurator } from "../lib/configuratorStore";
+
+    const resetBtn = document.getElementById("reset-btn");
+    if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+            resetConfigurator();
+            // Recharger la page pour voir les changements
+            window.location.reload();
+        });
+    }
+</script>
+
+<style>
+    :global(.sticky-column) {
+        position: sticky;
+        top: 20px;
+        height: fit-content;
+    }
+</style>

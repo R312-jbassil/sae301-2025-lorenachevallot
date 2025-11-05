@@ -86,6 +86,8 @@ const { onOptionsChange } = Astro.props;
         </div>
 
         <script>
+            import { updateOptions } from "../lib/configuratorStore";
+
             const emboutPersonnalisesInput = document.getElementById(
                 "emboutPersonnalises",
             ) as HTMLInputElement;
@@ -97,17 +99,14 @@ const { onOptionsChange } = Astro.props;
             ) as HTMLInputElement;
 
             function emitChanges() {
-                const event = new CustomEvent("optionsChange", {
-                    detail: {
-                        emboutPersonnalises:
-                            emboutPersonnalisesInput?.checked || false,
-                        charnieresFlexibles:
-                            charnieresFlexiblesInput?.checked || false,
-                        gravurePersonnalisee:
-                            gravurePersonnaliseeInput?.checked || false,
-                    },
+                updateOptions({
+                    emboutPersonnalises:
+                        emboutPersonnalisesInput?.checked || false,
+                    charnieresFlexibles:
+                        charnieresFlexiblesInput?.checked || false,
+                    gravurePersonnalisee:
+                        gravurePersonnaliseeInput?.checked || false,
                 });
-                document.dispatchEvent(event);
             }
 
             if (emboutPersonnalisesInput) {

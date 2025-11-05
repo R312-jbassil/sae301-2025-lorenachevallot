@@ -146,6 +146,8 @@ const { onSizeChange } = Astro.props;
         </style>
 
         <script>
+            import { updateTailles } from "../lib/configuratorStore";
+
             function updateRangeBackground(input: HTMLInputElement) {
                 const value = parseFloat(input.value);
                 const min = parseFloat(input.min);
@@ -164,6 +166,14 @@ const { onSizeChange } = Astro.props;
                 "largeurPont",
             ) as HTMLInputElement;
 
+            function emitChanges() {
+                updateTailles({
+                    largeurVerres: parseInt(largeurVerresInput?.value || "48"),
+                    hauteurVerres: parseInt(hauteurVerresInput?.value || "42"),
+                    largeurPont: parseInt(largeurPontInput?.value || "20"),
+                });
+            }
+
             function updateValue(input: HTMLInputElement) {
                 updateRangeBackground(input);
                 const valueSpan = input.parentElement?.querySelector(
@@ -172,6 +182,7 @@ const { onSizeChange } = Astro.props;
                 if (valueSpan) {
                     valueSpan.textContent = `${input.value} mm`;
                 }
+                emitChanges();
             }
 
             if (largeurVerresInput) {

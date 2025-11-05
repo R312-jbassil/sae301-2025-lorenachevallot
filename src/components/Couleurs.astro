@@ -18,6 +18,7 @@ const colorPalette = [
     { name: "Violet", hex: "#6366F1" },
     { name: "Rose", hex: "#F9A8D4" },
     { name: "Gris", hex: "#F3F4F6" },
+    { name: "Transparent", hex: "#CAC9F3" },
 ];
 ---
 
@@ -229,6 +230,20 @@ const colorPalette = [
         </div>
 
         <script>
+            import { updateCouleurs } from "../lib/configuratorStore";
+
+            const colorMap: Record<string, string> = {
+                "#000000": "Noir",
+                "#D4AF37": "Or",
+                "#1E3A8A": "Bleu",
+                "#EF4444": "Rouge",
+                "#22C55E": "Vert",
+                "#6366F1": "Violet",
+                "#F9A8D4": "Rose",
+                "#F3F4F6": "Gris",
+                "#CAC9F3": "Transparent",
+            };
+
             const tabButtons = document.querySelectorAll(".tab-btn");
             const tabContents = document.querySelectorAll(".tab-content");
             const underline = document.getElementById(
@@ -263,15 +278,29 @@ const colorPalette = [
             const verresColorBtns =
                 document.querySelectorAll(".verres-color-btn");
 
-            function emitChanges() {
-                const event = new CustomEvent("colorsChange", {
-                    detail: {
-                        monture: montureHexInput?.value || "#000000",
-                        branches: branchesHexInput?.value || "#D4AF37",
-                        verres: verresHexInput?.value || "#1E3A8A",
-                    },
+            function hexToColorName(hex: string): string {
+                return colorMap[hex.toUpperCase()] || hex;
+            }
+
+            function emitMontureChange() {
+                const montureHex = montureHexInput?.value || "#000000";
+                updateCouleurs({
+                    monture: hexToColorName(montureHex),
                 });
-                document.dispatchEvent(event);
+            }
+
+            function emitBranchesChange() {
+                const branchesHex = branchesHexInput?.value || "#D4AF37";
+                updateCouleurs({
+                    branches: hexToColorName(branchesHex),
+                });
+            }
+
+            function emitVerresChange() {
+                const verresHex = verresHexInput?.value || "#1E3A8A";
+                updateCouleurs({
+                    verres: hexToColorName(verresHex),
+                });
             }
 
             // Tab switching with animated underline
@@ -323,7 +352,7 @@ const colorPalette = [
                         if (montureColorPreview) {
                             montureColorPreview.style.backgroundColor = value;
                         }
-                        emitChanges();
+                        emitMontureChange();
                     }
                 });
             }
@@ -336,7 +365,7 @@ const colorPalette = [
                         if (branchesColorPreview) {
                             branchesColorPreview.style.backgroundColor = value;
                         }
-                        emitChanges();
+                        emitBranchesChange();
                     }
                 });
             }
@@ -349,7 +378,7 @@ const colorPalette = [
                         if (verresColorPreview) {
                             verresColorPreview.style.backgroundColor = value;
                         }
-                        emitChanges();
+                        emitVerresChange();
                     }
                 });
             }
@@ -364,7 +393,7 @@ const colorPalette = [
                     if (montureColorPreview) {
                         montureColorPreview.style.backgroundColor = hex || "";
                     }
-                    emitChanges();
+                    emitMontureChange();
                 });
             });
 
@@ -378,7 +407,7 @@ const colorPalette = [
                     if (branchesColorPreview) {
                         branchesColorPreview.style.backgroundColor = hex || "";
                     }
-                    emitChanges();
+                    emitBranchesChange();
                 });
             });
 
@@ -392,7 +421,7 @@ const colorPalette = [
                     if (verresColorPreview) {
                         verresColorPreview.style.backgroundColor = hex || "";
                     }
-                    emitChanges();
+                    emitVerresChange();
                 });
             });
         </script>

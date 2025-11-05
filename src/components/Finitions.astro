@@ -86,6 +86,8 @@ const { onFinitionChange } = Astro.props;
         </div>
 
         <script>
+            import { updateFinitions } from "../lib/configuratorStore";
+
             const finitionRadios = document.querySelectorAll(
                 'input[name="finition"]',
             );
@@ -95,12 +97,9 @@ const { onFinitionChange } = Astro.props;
                     'input[name="finition"]:checked',
                 ) as HTMLInputElement;
 
-                const event = new CustomEvent("finitionChange", {
-                    detail: {
-                        type: selectedRadio?.value || "Mat",
-                    },
+                updateFinitions({
+                    type: selectedRadio?.value || "Mat",
                 });
-                document.dispatchEvent(event);
             }
 
             finitionRadios.forEach((radio) => {
