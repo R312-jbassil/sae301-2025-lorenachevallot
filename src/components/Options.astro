@@ -10,12 +10,17 @@ interface Props {
 const { onOptionsChange } = Astro.props;
 ---
 
-<div class="w-full max-w-2xl mx-auto">
+<div class="w-full">
     <div class="join join-vertical w-full rounded-lg shadow-md">
         <div
             class="collapse collapse-arrow join-item border-2 border-base-300 bg-base-100 rounded-lg shadow-sm"
         >
-            <input type="checkbox" id="options-accordion" class="peer" />
+            <input
+                type="checkbox"
+                id="options-accordion"
+                class="peer"
+                checked
+            />
             <div class="collapse-title text-xl font-semibold cursor-pointer">
                 <span>Options</span>
             </div>
