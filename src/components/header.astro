@@ -67,8 +67,10 @@ import Panier from "../assets/panier.svg";
                     />
                 </button>
 
-                <!-- Connecter Icon -->
-                <button
+                <!-- Connecter Icon / Deconnexion Button -->
+                <a
+                    href="/connexion"
+                    id="connexion-link"
                     class="hover:opacity-70 transition-opacity duration-200"
                     aria-label="Connexion"
                 >
@@ -77,6 +79,15 @@ import Panier from "../assets/panier.svg";
                         alt="Connecter"
                         class="h-5 md:h-6 w-auto"
                     />
+                </a>
+
+                <!-- Deconnexion Button (hidden by default) -->
+                <button
+                    id="deconnexion-btn"
+                    class="hover:opacity-70 transition-opacity duration-200 px-4 py-2 bg-red-500 text-white rounded-md text-sm font-medium hidden"
+                    aria-label="Déconnexion"
+                >
+                    Déconnexion
                 </button>
 
                 <!-- Hamburger Menu - Mobile only -->
@@ -197,6 +208,43 @@ import Panier from "../assets/panier.svg";
 <script>
     const menuToggle = document.getElementById("menu-toggle");
     const mobileMenu = document.getElementById("mobile-menu");
+    const connexionLink = document.getElementById("connexion-link");
+    const deconnexionBtn = document.getElementById("deconnexion-btn");
+
+    // Check if user is logged in by checking for auth cookie
+    function isUserLoggedIn(): boolean {
+        const cookies = document.cookie.split("; ");
+        return cookies.some((cookie) => cookie.startsWith("pb_token="));
+    }
+
+    // Initialize UI based on login status
+    function initializeAuthUI() {
+        if (isUserLoggedIn()) {
+            connexionLink?.classList.add("hidden");
+            deconnexionBtn?.classList.remove("hidden");
+        } else {
+            connexionLink?.classList.remove("hidden");
+            deconnexionBtn?.classList.add("hidden");
+        }
+    }
+
+    // Initialize on page load
+    initializeAuthUI();
+
+    // Handle deconnexion
+    deconnexionBtn?.addEventListener("click", async () => {
+        // Clear auth cookies
+        document.cookie = "pb_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+        document.cookie = "pb_user_id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+        document.cookie = "pb_user_email=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+        document.cookie = "pb_user_name=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+        
+        // Update UI
+        initializeAuthUI();
+        
+        // Redirect to home page
+        window.location.href = "/";
+    });
 
     menuToggle?.addEventListener("click", () => {
         const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
@@ -208,8 +256,15 @@ import Panier from "../assets/panier.svg";
     const menuLinks = mobileMenu?.querySelectorAll("a");
     menuLinks?.forEach((link) => {
         link.addEventListener("click", () => {
-            menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle?.setAttribute("aria-expanded", "false");
             mobileMenu?.classList.add("hidden");
         });
+    });
+
+    // Listen for auth changes (via storage events for cross-tab sync)
+    window.addEventListener("storage", (event) => {
+        if (event.key?.includes("pb_")) {
+            initializeAuthUI();
+        }
     });
 </script>
