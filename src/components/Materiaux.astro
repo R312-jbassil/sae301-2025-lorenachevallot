@@ -1,0 +1,231 @@
+---
+interface Props {
+    onMaterialsChange?: (materials: {
+        montureType: string;
+        branchesType: string;
+    }) => void;
+}
+
+const { onMaterialsChange } = Astro.props;
+
+const materials = {
+    monture: [
+        {
+            name: "Acétate de cellulose",
+            description: "Léger, confortable, hypoallergénique",
+        },
+        {
+            name: "Titane",
+            description: "Ultra-résistant, léger, durable",
+        },
+        { name: "Inox", description: "Robuste, flexible, anti-corrosion" },
+    ],
+    branches: [
+        {
+            name: "Acétate de cellulose",
+            description: "Léger, confortable, hypoallergénique",
+        },
+        {
+            name: "Titane",
+            description: "Ultra-résistant, léger, durable",
+        },
+        { name: "Inox", description: "Robuste, flexible, anti-corrosion" },
+    ],
+};
+---
+
+<div class="w-full max-w-2xl mx-auto">
+    <div class="join join-vertical w-full rounded-lg shadow-md">
+        <div
+            class="collapse collapse-arrow join-item border-2 border-base-300 bg-base-100 rounded-lg shadow-sm"
+        >
+            <input type="checkbox" id="materiaux-accordion" class="peer" />
+            <div class="collapse-title text-xl font-semibold cursor-pointer">
+                <span>Matériaux</span>
+            </div>
+            <div class="collapse-content bg-base-100">
+                <div class="space-y-6 pt-4">
+                    {/* Monture */}
+                    <div class="space-y-3">
+                        <h3 class="font-semibold text-black">Monture</h3>
+                        <div
+                            class="collapse collapse-arrow border-2 border-base-300 bg-base-100 rounded-lg"
+                        >
+                            <input type="checkbox" id="monture-collapse" />
+                            <div
+                                class="collapse-title w-full justify-between text-black cursor-pointer font-medium"
+                                id="monture-button"
+                            >
+                                <span>Acétate de cellulose</span>
+                            </div>
+                            <div class="collapse-content bg-base-100">
+                                <div class="space-y-2 pt-2">
+                                    {
+                                        materials.monture.map((material) => (
+                                            <button
+                                                class="monture-option w-full p-3 text-left hover:bg-base-200 rounded-lg transition-colors block"
+                                                data-name={material.name}
+                                            >
+                                                <div class="flex flex-col gap-1">
+                                                    <span class="font-medium text-black">
+                                                        {material.name}
+                                                    </span>
+                                                    <span class="text-sm text-gray-500">
+                                                        {material.description}
+                                                    </span>
+                                                </div>
+                                            </button>
+                                        ))
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Branches */}
+                    <div class="space-y-3">
+                        <h3 class="font-semibold text-black">Branches</h3>
+                        <div
+                            class="collapse collapse-arrow border-2 border-base-300 bg-base-100 rounded-lg"
+                        >
+                            <input type="checkbox" id="branches-collapse" />
+                            <div
+                                class="collapse-title w-full justify-between text-black cursor-pointer font-medium"
+                                id="branches-button"
+                            >
+                                <span>Acétate de cellulose</span>
+                            </div>
+                            <div class="collapse-content bg-base-100">
+                                <div class="space-y-2 pt-2">
+                                    {
+                                        materials.branches.map((material) => (
+                                            <button
+                                                class="branches-option w-full p-3 text-left hover:bg-base-200 rounded-lg transition-colors block"
+                                                data-name={material.name}
+                                            >
+                                                <div class="flex flex-col gap-1">
+                                                    <span class="font-medium text-black">
+                                                        {material.name}
+                                                    </span>
+                                                    <span class="text-sm text-gray-500">
+                                                        {material.description}
+                                                    </span>
+                                                </div>
+                                            </button>
+                                        ))
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Descriptions */}
+                    <div
+                        class="bg-gray-50 rounded-lg p-4 space-y-2 border border-base-300"
+                    >
+                        <div class="text-sm">
+                            <span class="font-semibold text-black"
+                                >Acétate:</span
+                            >
+                            <span class="text-gray-600 ml-2">
+                                Léger, confortable, hypoallergénique
+                            </span>
+                        </div>
+                        <div class="text-sm">
+                            <span class="font-semibold text-black">Titane:</span
+                            >
+                            <span class="text-gray-600 ml-2">
+                                Ultra-résistant, léger, durable
+                            </span>
+                        </div>
+                        <div class="text-sm">
+                            <span class="font-semibold text-black">Inox:</span>
+                            <span class="text-gray-600 ml-2">
+                                Robuste, flexible, anti-corrosion
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const montureButton = document.getElementById(
+                "monture-button",
+            ) as HTMLElement;
+            const branchesButton = document.getElementById(
+                "branches-button",
+            ) as HTMLElement;
+            const montureCollapse = document.getElementById(
+                "monture-collapse",
+            ) as HTMLInputElement;
+            const branchesCollapse = document.getElementById(
+                "branches-collapse",
+            ) as HTMLInputElement;
+            const montureOptions = document.querySelectorAll(".monture-option");
+            const branchesOptions =
+                document.querySelectorAll(".branches-option");
+
+            // Initialiser le premier élément comme sélectionné
+            (montureOptions[0] as HTMLElement)?.classList.add("bg-base-200");
+            (branchesOptions[0] as HTMLElement)?.classList.add("bg-base-200");
+
+            function emitChanges() {
+                const montureSpan =
+                    montureButton?.querySelector("span:first-child");
+                const branchesSpan =
+                    branchesButton?.querySelector("span:first-child");
+
+                const event = new CustomEvent("materialsChange", {
+                    detail: {
+                        montureType: montureSpan?.textContent || "",
+                        branchesType: branchesSpan?.textContent || "",
+                    },
+                });
+                document.dispatchEvent(event);
+            }
+
+            montureOptions.forEach((option) => {
+                option.addEventListener("click", () => {
+                    const name = option.getAttribute("data-name");
+                    const montureSpan =
+                        montureButton?.querySelector("span:first-child");
+                    if (montureSpan) {
+                        montureSpan.textContent = name;
+                    }
+                    // Retirer le fond de tous les éléments
+                    montureOptions.forEach((opt) => {
+                        opt.classList.remove("bg-base-200");
+                    });
+                    // Ajouter le fond à l'élément sélectionné
+                    (option as HTMLElement).classList.add("bg-base-200");
+                    if (montureCollapse) {
+                        montureCollapse.checked = false;
+                    }
+                    emitChanges();
+                });
+            });
+
+            branchesOptions.forEach((option) => {
+                option.addEventListener("click", () => {
+                    const name = option.getAttribute("data-name");
+                    const branchesSpan =
+                        branchesButton?.querySelector("span:first-child");
+                    if (branchesSpan) {
+                        branchesSpan.textContent = name;
+                    }
+                    // Retirer le fond de tous les éléments
+                    branchesOptions.forEach((opt) => {
+                        opt.classList.remove("bg-base-200");
+                    });
+                    // Ajouter le fond à l'élément sélectionné
+                    (option as HTMLElement).classList.add("bg-base-200");
+                    if (branchesCollapse) {
+                        branchesCollapse.checked = false;
+                    }
+                    emitChanges();
+                });
+            });
+        </script>
+    </div>
+</div>

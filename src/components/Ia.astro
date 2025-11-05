@@ -1,0 +1,236 @@
+---
+interface Props {
+    onIaDescriptionChange?: (description: string) => void;
+    onIaExecute?: (config: {
+        description: string;
+        monture: string;
+        finition: string;
+        taillesVerres: string;
+        largeurPont: string;
+    }) => void;
+}
+
+const { onIaDescriptionChange, onIaExecute } = Astro.props;
+---
+
+<div class="w-full max-w-2xl mx-auto">
+    <div class="bg-white rounded-lg shadow-md border border-base-300 p-6">
+        {/* Header */}
+        <div class="mb-6">
+            <div class="flex items-center gap-2 mb-2">
+                <svg
+                    class="w-6 h-6 text-primary"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <h2 class="text-2xl font-bold text-black">
+                    Configuration par IA
+                </h2>
+            </div>
+            <p class="text-gray-600 text-sm">
+                Décrivez vos lunettes en langage naturel et laissez l'IA
+                configurer les paramètres.
+            </p>
+        </div>
+
+        {/* Textarea */}
+        <div class="mb-6 relative">
+            <div
+                id="placeholder-text"
+                class="absolute top-4 left-4 text-gray-400 text-sm pointer-events-none z-10 whitespace-pre-line leading-relaxed"
+            >
+                Décrivez vos lunettes idéales... Ex : Je veux une monture en
+                titane noir mat avec des verres ronds de 48mm
+            </div>
+            <textarea
+                id="ia-description"
+                class="textarea textarea-bordered w-full bg-gray-50 text-sm h-32 focus:outline-none focus:border-primary resize-none relative z-20"
+            >
+            </textarea>
+        </div>
+
+        {/* Execute Button */}
+        <button
+            id="ia-execute-btn"
+            class="btn w-full rounded-lg font-semibold text-white mb-6"
+            style="background-color: #C9A867; border-color: #C9A867;"
+        >
+            <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            Exécuter
+        </button>
+
+        {/* Results */}
+        <div id="ia-results" class="hidden space-y-3">
+            <div
+                id="result-monture"
+                class="inline-block bg-gray-100 px-4 py-2 rounded-lg text-sm font-medium text-gray-700"
+            >
+                Monture titane
+            </div>
+            <div
+                id="result-finition"
+                class="inline-block bg-gray-100 px-4 py-2 rounded-lg text-sm font-medium text-gray-700 ml-2"
+            >
+                Noir mat
+            </div>
+            <div
+                id="result-verres"
+                class="inline-block bg-gray-100 px-4 py-2 rounded-lg text-sm font-medium text-gray-700 ml-2"
+            >
+                Verres ronds 48 mm
+            </div>
+            <div
+                id="result-pont"
+                class="inline-block bg-gray-100 px-4 py-2 rounded-lg text-sm font-medium text-gray-700 ml-2"
+            >
+                Pont 20 mm
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const iaTextarea = document.getElementById(
+            "ia-description",
+        ) as HTMLTextAreaElement;
+        const iaExecuteBtn = document.getElementById(
+            "ia-execute-btn",
+        ) as HTMLButtonElement;
+        const iaResults = document.getElementById("ia-results") as HTMLElement;
+
+        const resultMonture = document.getElementById(
+            "result-monture",
+        ) as HTMLElement;
+        const resultFinition = document.getElementById(
+            "result-finition",
+        ) as HTMLElement;
+        const resultVerres = document.getElementById(
+            "result-verres",
+        ) as HTMLElement;
+        const resultPont = document.getElementById(
+            "result-pont",
+        ) as HTMLElement;
+        const placeholderText = document.getElementById(
+            "placeholder-text",
+        ) as HTMLElement;
+
+        // Ensure the placeholder displays the requested text
+        if (placeholderText) {
+            placeholderText.textContent =
+                "Décrivez vos lunettes idéales...\nEx : Je veux une monture en titane noir mat avec des verres ronds de 48mm";
+        }
+
+        // Handle placeholder visibility
+        function updatePlaceholder() {
+            if (iaTextarea && placeholderText) {
+                if (iaTextarea.value.length > 0) {
+                    placeholderText.classList.add("hidden");
+                } else {
+                    placeholderText.classList.remove("hidden");
+                }
+            }
+        }
+
+        // Listen for textarea changes
+        if (iaTextarea) {
+            iaTextarea.addEventListener("input", updatePlaceholder);
+            iaTextarea.addEventListener("focus", () => {
+                if (placeholderText) placeholderText.classList.add("hidden");
+            });
+            iaTextarea.addEventListener("blur", updatePlaceholder);
+        }
+
+        // Execute button
+        if (iaExecuteBtn) {
+            iaExecuteBtn.addEventListener("click", async () => {
+                const description = iaTextarea?.value || "";
+
+                if (!description.trim()) {
+                    alert(
+                        "Veuillez décrire vos lunettes idéales avant d'exécuter.",
+                    );
+                    return;
+                }
+
+                // Simulate AI parsing (in a real app, this would call an API)
+                const config = parseDescriptionWithAI(description);
+
+                // Update results display
+                if (resultMonture) resultMonture.textContent = config.monture;
+                if (resultFinition)
+                    resultFinition.textContent = config.finition;
+                if (resultVerres)
+                    resultVerres.textContent = config.taillesVerres;
+                if (resultPont) resultPont.textContent = config.largeurPont;
+
+                // Show results
+                if (iaResults) {
+                    iaResults.classList.remove("hidden");
+                }
+
+                // Emit event
+                const event = new CustomEvent("iaExecute", {
+                    detail: config,
+                });
+                document.dispatchEvent(event);
+            });
+        }
+
+        // Simple AI parsing function
+        function parseDescriptionWithAI(description: string) {
+            const lowerDesc = description.toLowerCase();
+
+            // Parse monture
+            let monture = "Acétate de cellulose";
+            if (lowerDesc.includes("titane")) monture = "Monture titane";
+            else if (lowerDesc.includes("inox")) monture = "Monture inox";
+            else if (lowerDesc.includes("acétate"))
+                monture = "Acétate de cellulose";
+
+            // Parse finition
+            let finition = "Mat";
+            if (lowerDesc.includes("brillant")) finition = "Brillant";
+            else if (lowerDesc.includes("brossé")) finition = "Brossé";
+            else if (lowerDesc.includes("mat")) finition = "Noir mat";
+
+            // Parse tailles verres
+            let taillesVerres = "Verres ronds 48 mm";
+            const verresMatch = description.match(/(\d+)\s*mm/i);
+            if (verresMatch) {
+                taillesVerres = `Verres ronds ${verresMatch[1]} mm`;
+            }
+
+            // Parse largeur pont
+            let largeurPont = "Pont 20 mm";
+            const pontMatch = description.match(/pont\s*(\d+)/i);
+            if (pontMatch) {
+                largeurPont = `Pont ${pontMatch[1]} mm`;
+            }
+
+            return {
+                description,
+                monture,
+                finition,
+                taillesVerres,
+                largeurPont,
+            };
+        }
+    </script>
+</div>

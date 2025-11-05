@@ -1,0 +1,395 @@
+---
+interface Props {
+    onColorsChange?: (colors: {
+        monture: string;
+        branches: string;
+        verres: string;
+    }) => void;
+}
+
+const { onColorsChange } = Astro.props;
+
+const colorPalette = [
+    { name: "Noir", hex: "#000000" },
+    { name: "Or", hex: "#D4AF37" },
+    { name: "Bleu", hex: "#1E3A8A" },
+    { name: "Rouge", hex: "#EF4444" },
+    { name: "Vert", hex: "#22C55E" },
+    { name: "Violet", hex: "#6366F1" },
+    { name: "Rose", hex: "#F9A8D4" },
+    { name: "Gris", hex: "#F3F4F6" },
+];
+---
+
+<div class="w-full max-w-2xl mx-auto">
+    <div class="join join-vertical w-full rounded-lg shadow-md">
+        <div
+            class="collapse collapse-arrow join-item border-2 border-base-300 bg-base-100 rounded-lg shadow-sm"
+        >
+            <input type="checkbox" id="couleurs-accordion" class="peer" />
+            <div class="collapse-title text-xl font-semibold cursor-pointer">
+                <span>Couleurs</span>
+            </div>
+            <div class="collapse-content bg-base-100">
+                <div class="space-y-6 pt-4">
+                    {/* Custom Tabs with animated underline */}
+                    <div class="space-y-4">
+                        <div class="flex border-b border-base-300 relative">
+                            <button
+                                class="tab-btn flex-1 py-2 text-center font-semibold text-black transition-colors"
+                                data-tab="monture"
+                                id="btn-monture"
+                            >
+                                Monture
+                            </button>
+                            <button
+                                class="tab-btn flex-1 py-2 text-center font-semibold text-gray-400 transition-colors"
+                                data-tab="branches"
+                                id="btn-branches"
+                            >
+                                Branches
+                            </button>
+                            <button
+                                class="tab-btn flex-1 py-2 text-center font-semibold text-gray-400 transition-colors"
+                                data-tab="verres"
+                                id="btn-verres"
+                            >
+                                Verres
+                            </button>
+                            <div
+                                id="underline"
+                                class="absolute -bottom-1 h-1 bg-primary transition-all duration-300 ease-out"
+                                style="width: 33.33%; left: 0%;"
+                            >
+                            </div>
+                        </div>
+
+                        {/* Monture Tab */}
+                        <div id="content-monture" class="tab-content block">
+                            {/* Monture Content */}
+                            <div class="space-y-4 pt-4">
+                                <div>
+                                    <label class="label" for="monture-hex">
+                                        <span
+                                            class="label-text text-sm font-medium text-gray-600"
+                                        >
+                                            Couleur personnalisée
+                                        </span>
+                                    </label>
+                                    <div class="flex gap-2">
+                                        <input
+                                            type="text"
+                                            id="monture-hex"
+                                            placeholder="Ex. #000000"
+                                            class="input input-bordered flex-1 bg-gray-50 text-sm"
+                                            value="#000000"
+                                        />
+                                        <div
+                                            id="monture-color-preview"
+                                            class="w-12 h-12 rounded-lg border-2 border-base-300 shadow-sm"
+                                            style="background-color: #000000;"
+                                        >
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p
+                                        class="text-sm font-medium text-gray-600 mb-3"
+                                    >
+                                        Palette de couleurs
+                                    </p>
+                                    <div class="flex gap-2 flex-wrap">
+                                        {
+                                            colorPalette.map((color) => (
+                                                <button
+                                                    class="monture-color-btn flex-1 min-w-12 h-12 rounded-lg border-2 border-base-300 transition-all hover:scale-110 shadow-sm hover:shadow-md"
+                                                    data-hex={color.hex}
+                                                    data-tab="monture"
+                                                    style={`background-color: ${color.hex};`}
+                                                    title={color.name}
+                                                />
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Branches Tab */}
+                        <div id="content-branches" class="tab-content hidden">
+                            {/* Branches Content */}
+                            <div class="space-y-4 pt-4">
+                                <div>
+                                    <label class="label" for="branches-hex">
+                                        <span
+                                            class="label-text text-sm font-medium text-gray-600"
+                                        >
+                                            Couleur personnalisée
+                                        </span>
+                                    </label>
+                                    <div class="flex gap-2">
+                                        <input
+                                            type="text"
+                                            id="branches-hex"
+                                            placeholder="Ex. #D4AF37"
+                                            class="input input-bordered flex-1 bg-gray-50 text-sm"
+                                            value="#D4AF37"
+                                        />
+                                        <div
+                                            id="branches-color-preview"
+                                            class="w-12 h-12 rounded-lg border-2 border-base-300 shadow-sm"
+                                            style="background-color: #D4AF37;"
+                                        >
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p
+                                        class="text-sm font-medium text-gray-600 mb-3"
+                                    >
+                                        Palette de couleurs
+                                    </p>
+                                    <div class="flex gap-2 flex-wrap">
+                                        {
+                                            colorPalette.map((color) => (
+                                                <button
+                                                    class="branches-color-btn flex-1 min-w-12 h-12 rounded-lg border-2 border-base-300 transition-all hover:scale-110 shadow-sm hover:shadow-md"
+                                                    data-hex={color.hex}
+                                                    data-tab="branches"
+                                                    style={`background-color: ${color.hex};`}
+                                                    title={color.name}
+                                                />
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Verres Tab */}
+                        <div id="content-verres" class="tab-content hidden">
+                            <div class="space-y-4 pt-4">
+                                <div>
+                                    <label class="label" for="verres-hex">
+                                        <span
+                                            class="label-text text-sm font-medium text-gray-600"
+                                        >
+                                            Couleur personnalisée
+                                        </span>
+                                    </label>
+                                    <div class="flex gap-2">
+                                        <input
+                                            type="text"
+                                            id="verres-hex"
+                                            placeholder="Ex. #1E3A8A"
+                                            class="input input-bordered flex-1 bg-gray-50 text-sm"
+                                            value="#1E3A8A"
+                                        />
+                                        <div
+                                            id="verres-color-preview"
+                                            class="w-12 h-12 rounded-lg border-2 border-base-300 shadow-sm"
+                                            style="background-color: #1E3A8A;"
+                                        >
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p
+                                        class="text-sm font-medium text-gray-600 mb-3"
+                                    >
+                                        Palette de couleurs
+                                    </p>
+                                    <div class="flex gap-2 flex-wrap">
+                                        {
+                                            colorPalette.map((color) => (
+                                                <button
+                                                    class="verres-color-btn flex-1 min-w-12 h-12 rounded-lg border-2 border-base-300 transition-all hover:scale-110 shadow-sm hover:shadow-md"
+                                                    data-hex={color.hex}
+                                                    data-tab="verres"
+                                                    style={`background-color: ${color.hex};`}
+                                                    title={color.name}
+                                                />
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const tabButtons = document.querySelectorAll(".tab-btn");
+            const tabContents = document.querySelectorAll(".tab-content");
+            const underline = document.getElementById(
+                "underline",
+            ) as HTMLElement;
+
+            const montureHexInput = document.getElementById(
+                "monture-hex",
+            ) as HTMLInputElement;
+            const branchesHexInput = document.getElementById(
+                "branches-hex",
+            ) as HTMLInputElement;
+            const verresHexInput = document.getElementById(
+                "verres-hex",
+            ) as HTMLInputElement;
+
+            const montureColorPreview = document.getElementById(
+                "monture-color-preview",
+            ) as HTMLElement;
+            const branchesColorPreview = document.getElementById(
+                "branches-color-preview",
+            ) as HTMLElement;
+            const verresColorPreview = document.getElementById(
+                "verres-color-preview",
+            ) as HTMLElement;
+
+            const montureColorBtns =
+                document.querySelectorAll(".monture-color-btn");
+            const branchesColorBtns = document.querySelectorAll(
+                ".branches-color-btn",
+            );
+            const verresColorBtns =
+                document.querySelectorAll(".verres-color-btn");
+
+            function emitChanges() {
+                const event = new CustomEvent("colorsChange", {
+                    detail: {
+                        monture: montureHexInput?.value || "#000000",
+                        branches: branchesHexInput?.value || "#D4AF37",
+                        verres: verresHexInput?.value || "#1E3A8A",
+                    },
+                });
+                document.dispatchEvent(event);
+            }
+
+            // Tab switching with animated underline
+            tabButtons.forEach((btn, index) => {
+                btn.addEventListener("click", () => {
+                    const tab = btn.getAttribute("data-tab");
+
+                    // Update active button color
+                    tabButtons.forEach((b) => {
+                        b.classList.remove("text-black");
+                        b.classList.add("text-gray-400");
+                    });
+                    btn.classList.remove("text-gray-400");
+                    btn.classList.add("text-black");
+
+                    // Hide all tabs
+                    tabContents.forEach((content) => {
+                        content.classList.add("hidden");
+                        content.classList.remove("block");
+                    });
+
+                    // Show active tab
+                    const activeContent = document.getElementById(
+                        `content-${tab}`,
+                    );
+                    if (activeContent) {
+                        activeContent.classList.remove("hidden");
+                        activeContent.classList.add("block");
+                    }
+
+                    // Move underline
+                    const tabIndex = Array.from(tabButtons).indexOf(
+                        btn as HTMLElement,
+                    );
+                    const underlineWidth = (1 / tabButtons.length) * 100;
+                    const underlineLeft = tabIndex * underlineWidth;
+                    if (underline) {
+                        underline.style.width = `${underlineWidth}%`;
+                        underline.style.left = `${underlineLeft}%`;
+                    }
+                });
+            });
+
+            // Monture hex input
+            if (montureHexInput) {
+                montureHexInput.addEventListener("input", (e) => {
+                    const value = (e.target as HTMLInputElement).value;
+                    if (/^#[0-9A-F]{6}$/i.test(value)) {
+                        if (montureColorPreview) {
+                            montureColorPreview.style.backgroundColor = value;
+                        }
+                        emitChanges();
+                    }
+                });
+            }
+
+            // Branches hex input
+            if (branchesHexInput) {
+                branchesHexInput.addEventListener("input", (e) => {
+                    const value = (e.target as HTMLInputElement).value;
+                    if (/^#[0-9A-F]{6}$/i.test(value)) {
+                        if (branchesColorPreview) {
+                            branchesColorPreview.style.backgroundColor = value;
+                        }
+                        emitChanges();
+                    }
+                });
+            }
+
+            // Verres hex input
+            if (verresHexInput) {
+                verresHexInput.addEventListener("input", (e) => {
+                    const value = (e.target as HTMLInputElement).value;
+                    if (/^#[0-9A-F]{6}$/i.test(value)) {
+                        if (verresColorPreview) {
+                            verresColorPreview.style.backgroundColor = value;
+                        }
+                        emitChanges();
+                    }
+                });
+            }
+
+            // Monture color palette
+            montureColorBtns.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    const hex = btn.getAttribute("data-hex");
+                    if (montureHexInput) {
+                        montureHexInput.value = hex || "";
+                    }
+                    if (montureColorPreview) {
+                        montureColorPreview.style.backgroundColor = hex || "";
+                    }
+                    emitChanges();
+                });
+            });
+
+            // Branches color palette
+            branchesColorBtns.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    const hex = btn.getAttribute("data-hex");
+                    if (branchesHexInput) {
+                        branchesHexInput.value = hex || "";
+                    }
+                    if (branchesColorPreview) {
+                        branchesColorPreview.style.backgroundColor = hex || "";
+                    }
+                    emitChanges();
+                });
+            });
+
+            // Verres color palette
+            verresColorBtns.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    const hex = btn.getAttribute("data-hex");
+                    if (verresHexInput) {
+                        verresHexInput.value = hex || "";
+                    }
+                    if (verresColorPreview) {
+                        verresColorPreview.style.backgroundColor = hex || "";
+                    }
+                    emitChanges();
+                });
+            });
+        </script>
+    </div>
+</div>

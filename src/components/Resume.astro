@@ -1,0 +1,106 @@
+---
+interface Props {
+    monture?: string;
+    couleurMonture?: string;
+    couleurBranches?: string;
+    branches?: string;
+    finition?: string;
+    dimensions?: string;
+    prix?: number;
+    livraisonOfferte?: boolean;
+}
+
+const {
+    monture = "titanium",
+    couleurMonture = "rouge",
+    couleurBranches = "bleu",
+    branches = "acetate",
+    finition = "mat",
+    dimensions = "48-20-42",
+    prix = 280,
+    livraisonOfferte = true,
+} = Astro.props;
+---
+
+<div
+    class="card bg-white shadow-lg rounded-lg p-6 border border-gray-200 max-w-3xl"
+>
+    <!-- Titre -->
+    <h2 class="text-2xl font-bold mb-6">Résumé</h2>
+
+    <!-- Section Monture -->
+    <div class="space-y-4 mb-8">
+        <div class="flex justify-between items-center border-b pb-3">
+            <span class="text-gray-700">Monture</span>
+            <span class="font-semibold text-gray-900">{monture}</span>
+        </div>
+
+        <div class="flex justify-between items-center border-b pb-3">
+            <span class="text-gray-700">Couleur monture</span>
+            <span class="font-semibold text-gray-900">{couleurMonture}</span>
+        </div>
+
+        <div class="flex justify-between items-center border-b pb-3">
+            <span class="text-gray-700">Couleur branches</span>
+            <span class="font-semibold text-gray-900">{couleurBranches}</span>
+        </div>
+
+        <div class="flex justify-between items-center border-b pb-3">
+            <span class="text-gray-700">Branches</span>
+            <span class="font-semibold text-gray-900">{branches}</span>
+        </div>
+
+        <div class="flex justify-between items-center border-b pb-3">
+            <span class="text-gray-700">Finition</span>
+            <span class="font-semibold text-gray-900">{finition}</span>
+        </div>
+
+        <div class="flex justify-between items-center">
+            <span class="text-gray-700">Dimensions</span>
+            <span class="font-semibold text-gray-900">{dimensions}</span>
+        </div>
+    </div>
+
+    <!-- Séparateur -->
+    <div class="border-t-2 border-gray-300 my-6"></div>
+
+    <!-- Section Prix -->
+    <div class="space-y-3 mb-8">
+        <div class="flex justify-between items-center">
+            <span class="text-gray-700">Prix estimatif</span>
+            <span class="text-2xl font-bold text-gray-900">{prix}€</span>
+        </div>
+
+        {
+            livraisonOfferte && (
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-gray-700">Livraison offerte</span>
+                </div>
+            )
+        }
+    </div>
+
+    <!-- Boutons -->
+    <div class="space-y-3">
+        <!-- Bouton principal -->
+        <button
+            class="btn btn-lg btn-block btn-neutral text-white font-semibold rounded-lg"
+        >
+            Ajouter au panier
+        </button>
+
+        <!-- Boutons secondaires -->
+        <div class="grid grid-cols-2 gap-3">
+            <button
+                class="btn btn-lg btn-outline btn-neutral rounded-lg font-semibold"
+            >
+                Enregistrer
+            </button>
+            <button
+                class="btn btn-lg btn-outline btn-neutral rounded-lg font-semibold"
+            >
+                Partager
+            </button>
+        </div>
+    </div>
+</div>

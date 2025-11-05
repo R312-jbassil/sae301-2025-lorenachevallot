@@ -1,0 +1,106 @@
+---
+interface Props {
+    onFinitionChange?: (finition: { type: string }) => void;
+}
+
+const { onFinitionChange } = Astro.props;
+---
+
+<div class="w-full max-w-2xl mx-auto">
+    <div class="join join-vertical w-full rounded-lg shadow-md">
+        <div
+            class="collapse collapse-arrow join-item border-2 border-base-300 bg-base-100 rounded-lg shadow-sm"
+        >
+            <input type="checkbox" id="finitions-accordion" class="peer" />
+            <div class="collapse-title text-xl font-semibold cursor-pointer">
+                <span>Finitions</span>
+            </div>
+            <div class="collapse-content bg-base-100">
+                <div class="space-y-6 pt-4">
+                    {/* Type de finition */}
+                    <div class="space-y-4">
+                        <h3 class="font-semibold text-black">
+                            Type de finition
+                        </h3>
+
+                        {/* Mat */}
+                        <div class="form-control">
+                            <label
+                                class="label cursor-pointer justify-start gap-3"
+                            >
+                                <input
+                                    type="radio"
+                                    id="finition-mat"
+                                    name="finition"
+                                    value="Mat"
+                                    class="radio radio-primary"
+                                    checked
+                                />
+                                <span class="label-text text-black"> Mat </span>
+                            </label>
+                        </div>
+
+                        {/* Brillant */}
+                        <div class="form-control">
+                            <label
+                                class="label cursor-pointer justify-start gap-3"
+                            >
+                                <input
+                                    type="radio"
+                                    id="finition-brillant"
+                                    name="finition"
+                                    value="Brillant"
+                                    class="radio radio-primary"
+                                />
+                                <span class="label-text text-black">
+                                    Brillant
+                                </span>
+                            </label>
+                        </div>
+
+                        {/* Brossé */}
+                        <div class="form-control">
+                            <label
+                                class="label cursor-pointer justify-start gap-3"
+                            >
+                                <input
+                                    type="radio"
+                                    id="finition-brosse"
+                                    name="finition"
+                                    value="Brossé"
+                                    class="radio radio-primary"
+                                />
+                                <span class="label-text text-black">
+                                    Brossé
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const finitionRadios = document.querySelectorAll(
+                'input[name="finition"]',
+            );
+
+            function emitChanges() {
+                const selectedRadio = document.querySelector(
+                    'input[name="finition"]:checked',
+                ) as HTMLInputElement;
+
+                const event = new CustomEvent("finitionChange", {
+                    detail: {
+                        type: selectedRadio?.value || "Mat",
+                    },
+                });
+                document.dispatchEvent(event);
+            }
+
+            finitionRadios.forEach((radio) => {
+                radio.addEventListener("change", emitChanges);
+            });
+        </script>
+    </div>
+</div>

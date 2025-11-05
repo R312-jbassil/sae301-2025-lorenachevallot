@@ -1,0 +1,194 @@
+---
+interface Props {
+    onSizeChange?: (sizes: {
+        width: number;
+        height: number;
+        bridgeWidth: number;
+    }) => void;
+}
+
+const { onSizeChange } = Astro.props;
+---
+
+<div class="w-full max-w-2xl mx-auto">
+    <div class="join join-vertical w-full rounded-lg shadow-md">
+        <div
+            class="collapse collapse-arrow join-item border-2 border-base-300 bg-base-100 rounded-lg shadow-sm"
+        >
+            <input type="checkbox" id="tailles-accordion" class="peer" />
+            <div class="collapse-title text-xl font-semibold cursor-pointer">
+                <span>Tailles</span>
+            </div>
+            <div class="collapse-content bg-base-100">
+                <div class="space-y-6 pt-4">
+                    {/* Largeur des verres */}
+                    <div class="form-control">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="label">
+                                <span
+                                    class="label-text font-semibold text-black"
+                                    >Largeur des verres</span
+                                >
+                            </label>
+                            <span class="text-lg font-semibold text-primary"
+                                >48 mm</span
+                            >
+                        </div>
+                        <input
+                            type="range"
+                            min="40"
+                            max="56"
+                            value="48"
+                            class="range range-primary w-full"
+                            id="largeurVerres"
+                            data-info="Plage : 40-56 mm"
+                        />
+                        <div class="text-sm text-gray-500 mt-1">
+                            Plage : 40-56 mm
+                        </div>
+                    </div>
+
+                    {/* Hauteur des verres */}
+                    <div class="form-control">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="label">
+                                <span
+                                    class="label-text font-semibold text-black"
+                                    >Hauteur des verres</span
+                                >
+                            </label>
+                            <span class="text-lg font-semibold text-primary"
+                                >42 mm</span
+                            >
+                        </div>
+                        <input
+                            type="range"
+                            min="35"
+                            max="50"
+                            value="42"
+                            class="range range-primary w-full"
+                            id="hauteurVerres"
+                            data-info="Plage : 35-50 mm"
+                        />
+                        <div class="text-sm text-gray-500 mt-1">
+                            Plage : 35-50 mm
+                        </div>
+                    </div>
+
+                    {/* Largeur du pont */}
+                    <div class="form-control">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="label">
+                                <span
+                                    class="label-text font-semibold text-black"
+                                    >Largeur du pont</span
+                                >
+                            </label>
+                            <span class="text-lg font-semibold text-primary"
+                                >20 mm</span
+                            >
+                        </div>
+                        <input
+                            type="range"
+                            min="14"
+                            max="24"
+                            value="20"
+                            class="range range-primary w-full"
+                            id="largeurPont"
+                            data-info="Plage : 14-24 mm"
+                        />
+                        <div class="text-sm text-gray-500 mt-1">
+                            Plage : 14-24 mm
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .range {
+                appearance: none;
+                -webkit-appearance: none;
+                width: 100%;
+                background: #d1d5db;
+            }
+
+            .range::-webkit-slider-runnable-track {
+                background: linear-gradient(
+                    to right,
+                    hsl(var(--p)) 0%,
+                    hsl(var(--p)) var(--slider-percent),
+                    #d1d5db var(--slider-percent),
+                    #d1d5db 100%
+                );
+                height: 8px;
+                border-radius: 5px;
+                border: none;
+            }
+
+            .range::-moz-range-progress {
+                background: hsl(var(--p));
+                height: 8px;
+                border-radius: 5px;
+            }
+
+            .range::-moz-range-track {
+                background: #d1d5db;
+                height: 8px;
+                border-radius: 5px;
+                border: none;
+            }
+        </style>
+
+        <script>
+            function updateRangeBackground(input: HTMLInputElement) {
+                const value = parseFloat(input.value);
+                const min = parseFloat(input.min);
+                const max = parseFloat(input.max);
+                const percent = ((value - min) / (max - min)) * 100;
+                input.style.setProperty("--slider-percent", `${percent}%`);
+            }
+
+            const largeurVerresInput = document.getElementById(
+                "largeurVerres",
+            ) as HTMLInputElement;
+            const hauteurVerresInput = document.getElementById(
+                "hauteurVerres",
+            ) as HTMLInputElement;
+            const largeurPontInput = document.getElementById(
+                "largeurPont",
+            ) as HTMLInputElement;
+
+            function updateValue(input: HTMLInputElement) {
+                updateRangeBackground(input);
+                const valueSpan = input.parentElement?.querySelector(
+                    ".text-primary",
+                ) as HTMLElement;
+                if (valueSpan) {
+                    valueSpan.textContent = `${input.value} mm`;
+                }
+            }
+
+            if (largeurVerresInput) {
+                updateRangeBackground(largeurVerresInput);
+                largeurVerresInput.addEventListener("input", function () {
+                    updateValue(this);
+                });
+            }
+
+            if (hauteurVerresInput) {
+                updateRangeBackground(hauteurVerresInput);
+                hauteurVerresInput.addEventListener("input", function () {
+                    updateValue(this);
+                });
+            }
+
+            if (largeurPontInput) {
+                updateRangeBackground(largeurPontInput);
+                largeurPontInput.addEventListener("input", function () {
+                    updateValue(this);
+                });
+            }
+        </script>
+    </div>
+</div>

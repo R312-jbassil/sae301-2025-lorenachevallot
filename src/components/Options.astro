@@ -1,0 +1,128 @@
+---
+interface Props {
+    onOptionsChange?: (options: {
+        emboutPersonnalises: boolean;
+        charnieresFlexibles: boolean;
+        gravurePersonnalisee: boolean;
+    }) => void;
+}
+
+const { onOptionsChange } = Astro.props;
+---
+
+<div class="w-full max-w-2xl mx-auto">
+    <div class="join join-vertical w-full rounded-lg shadow-md">
+        <div
+            class="collapse collapse-arrow join-item border-2 border-base-300 bg-base-100 rounded-lg shadow-sm"
+        >
+            <input type="checkbox" id="options-accordion" class="peer" />
+            <div class="collapse-title text-xl font-semibold cursor-pointer">
+                <span>Options</span>
+            </div>
+            <div class="collapse-content bg-base-100">
+                <div class="space-y-6 pt-4">
+                    {/* Personnalisation supplémentaire */}
+                    <div class="space-y-4">
+                        <h3 class="font-semibold text-black">
+                            Personnalisation supplémentaire
+                        </h3>
+
+                        {/* Embouts personnalisés */}
+                        <div class="form-control">
+                            <label
+                                class="label cursor-pointer justify-start gap-3"
+                            >
+                                <input
+                                    type="checkbox"
+                                    id="emboutPersonnalises"
+                                    class="checkbox checkbox-primary"
+                                    checked
+                                />
+                                <span class="label-text text-black">
+                                    Embouts personnalisés
+                                </span>
+                            </label>
+                        </div>
+
+                        {/* Charnières flexibles */}
+                        <div class="form-control">
+                            <label
+                                class="label cursor-pointer justify-start gap-3"
+                            >
+                                <input
+                                    type="checkbox"
+                                    id="charnieresFlexibles"
+                                    class="checkbox checkbox-primary"
+                                />
+                                <span class="label-text text-black">
+                                    Charnières flexibles
+                                </span>
+                            </label>
+                        </div>
+
+                        {/* Gravure personnalisée */}
+                        <div class="form-control">
+                            <label
+                                class="label cursor-pointer justify-start gap-3"
+                            >
+                                <input
+                                    type="checkbox"
+                                    id="gravurePersonnalisee"
+                                    class="checkbox checkbox-primary"
+                                />
+                                <span class="label-text text-black">
+                                    Gravure personnalisée
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const emboutPersonnalisesInput = document.getElementById(
+                "emboutPersonnalises",
+            ) as HTMLInputElement;
+            const charnieresFlexiblesInput = document.getElementById(
+                "charnieresFlexibles",
+            ) as HTMLInputElement;
+            const gravurePersonnaliseeInput = document.getElementById(
+                "gravurePersonnalisee",
+            ) as HTMLInputElement;
+
+            function emitChanges() {
+                const event = new CustomEvent("optionsChange", {
+                    detail: {
+                        emboutPersonnalises:
+                            emboutPersonnalisesInput?.checked || false,
+                        charnieresFlexibles:
+                            charnieresFlexiblesInput?.checked || false,
+                        gravurePersonnalisee:
+                            gravurePersonnaliseeInput?.checked || false,
+                    },
+                });
+                document.dispatchEvent(event);
+            }
+
+            if (emboutPersonnalisesInput) {
+                emboutPersonnalisesInput.addEventListener(
+                    "change",
+                    emitChanges,
+                );
+            }
+            if (charnieresFlexiblesInput) {
+                charnieresFlexiblesInput.addEventListener(
+                    "change",
+                    emitChanges,
+                );
+            }
+            if (gravurePersonnaliseeInput) {
+                gravurePersonnaliseeInput.addEventListener(
+                    "change",
+                    emitChanges,
+                );
+            }
+        </script>
+    </div>
+</div>
