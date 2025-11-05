@@ -1,145 +1,311 @@
 ---
-
+import Insta from "../assets/insta.svg";
+import Twitter from "../assets/twitter.svg";
+import Facebook from "../assets/facebook.svg";
+import LinkedIn from "../assets/linkedin.svg";
+import QRCode from "../assets/Qr_Code.png";
+import temps from "../assets/temps.svg";
+import validation from "../assets/validation.svg";
+import googleplay from "../assets/google_play.png";
+import appstore from "../assets/appstore.png";
 ---
 
-<footer class="w-full bg-black text-white">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8 py-14">
+<footer id="site-footer" class="w-full bg-black text-white/95">
+  <div class="w-full mx-auto px-12 lg:px-16 py-16">
     <!-- Top columns -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-16 gap-y-12">
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-24 gap-y-16"
+    >
       <!-- Newsletter -->
       <div>
-        <h3 class="text-2xl font-semibold text-primary">Newsletter</h3>
-        <p class="mt-4 text-base font-semibold">Inscris-toi</p>
-        <p class="mt-3 text-sm text-gray-300 max-w-xs leading-relaxed">
+        <h3
+          class="text-2xl font-semibold text-primary tracking-wide leading-tight"
+        >
+          Newsletter
+        </h3>
+        <p class="mt-4 text-base font-semibold text-primary label-text">
+          Inscris-toi
+        </p>
+        <p class="mt-3 text-sm text-gray-400 max-w-xs leading-relaxed prose-sm">
           Reçois -10 % sur ta première commande et nos dernières nouveautés.
         </p>
-        <div class="mt-6 w-72 max-w-full">
-          <div class="relative">
-            <input type="email" placeholder="Enter your email" class="input input-bordered w-full bg-transparent border-gray-600 text-white placeholder-gray-400 rounded-md pr-12" />
-            <button class="absolute right-1 top-1 h-9 w-10 rounded-md border border-gray-600 hover:border-primary transition-colors grid place-items-center" aria-label="S'inscrire">
-              <!-- arrow icon -->
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4 text-white">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 12h14M12 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
+        <div class="mt-6 w-72 max-w-full flex gap-2 items-center">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            class="input flex-1 bg-black/20 border border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary/60 text-white placeholder-gray-500 rounded-md transition-colors"
+          />
+          <button
+            class="h-9 w-10 rounded-md border border-primary bg-primary text-black hover:bg-primary/90 transition-colors grid place-items-center shrink-0"
+            aria-label="S'inscrire"
+          >
+            <!-- arrow icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M4 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </button>
         </div>
       </div>
 
       <!-- Contact -->
       <div>
-        <h3 class="text-2xl font-semibold text-primary">Contact</h3>
-        <div class="mt-4 space-y-2 text-sm text-gray-300 leading-relaxed">
-          <p>11 rue du Mouvement, 44000 Nantes, France</p>
-          <p>moval@gmail.com</p>
-          <p>+33 1 84 25 64 90</p>
+        <h3
+          class="text-2xl font-semibold text-primary tracking-wide leading-tight"
+        >
+          Contact
+        </h3>
+        <div
+          class="mt-4 space-y-2 text-sm text-primary leading-relaxed prose-sm"
+        >
+          <p class="label-text">11 rue du Mouvement, 44000 Nantes, France</p>
+          <p class="label-text">moval@gmail.com</p>
+          <p class="label-text">+33 1 84 25 64 90</p>
         </div>
       </div>
 
       <!-- Mon compte -->
       <div>
-        <h3 class="text-2xl font-semibold text-primary">Mon compte</h3>
-        <ul class="mt-4 space-y-2 text-sm">
-          <li><a class="hover:text-primary transition-colors" href="#">Mon profil</a></li>
-          <li><a class="hover:text-primary transition-colors" href="#">Connexion / Inscription</a></li>
-          <li><a class="hover:text-primary transition-colors" href="#">Mes créations</a></li>
-          <li><a class="hover:text-primary transition-colors" href="#">Mon panier</a></li>
-          <li><a class="hover:text-primary transition-colors" href="#">Boutique</a></li>
+        <h3
+          class="text-2xl font-semibold text-primary tracking-wide leading-tight"
+        >
+          Mon compte
+        </h3>
+        <ul class="mt-4 space-y-2 text-sm text-primary menu-compact">
+          <li>
+            <a class="hover:text-primary transition-colors label-text" href="#"
+              >Mon profil</a
+            >
+          </li>
+          <li>
+            <a class="hover:text-primary transition-colors label-text" href="#"
+              >Connexion / Inscription</a
+            >
+          </li>
+          <li>
+            <a class="hover:text-primary transition-colors label-text" href="#"
+              >Mes créations</a
+            >
+          </li>
+          <li>
+            <a class="hover:text-primary transition-colors label-text" href="#"
+              >Mon panier</a
+            >
+          </li>
+          <li>
+            <a class="hover:text-primary transition-colors label-text" href="#"
+              >Boutique</a
+            >
+          </li>
         </ul>
       </div>
 
       <!-- Liens utiles -->
       <div>
-        <h3 class="text-2xl font-semibold text-primary">Liens utiles</h3>
-        <ul class="mt-4 space-y-2 text-sm">
-          <li><a class="hover:text-primary transition-colors" href="#">Politique de confidentialité</a></li>
-          <li><a class="hover:text-primary transition-colors" href="#">Conditions générales</a></li>
-          <li><a class="hover:text-primary transition-colors" href="#">FAQ</a></li>
-          <li><a class="hover:text-primary transition-colors" href="#">Nous contacter</a></li>
+        <h3
+          class="text-2xl font-semibold text-primary tracking-wide leading-tight"
+        >
+          Liens utiles
+        </h3>
+        <ul class="mt-4 space-y-2 text-sm text-primary menu-compact">
+          <li>
+            <a class="hover:text-primary transition-colors label-text" href="#"
+              >Politique de confidentialité</a
+            >
+          </li>
+          <li>
+            <a class="hover:text-primary transition-colors label-text" href="#"
+              >Conditions générales</a
+            >
+          </li>
+          <li>
+            <a class="hover:text-primary transition-colors label-text" href="#"
+              >FAQ</a
+            >
+          </li>
+          <li>
+            <a class="hover:text-primary transition-colors label-text" href="#"
+              >Nous contacter</a
+            >
+          </li>
         </ul>
       </div>
 
       <!-- Notre application -->
       <div>
-        <h3 class="text-2xl font-semibold text-primary">Notre application</h3>
-        <p class="mt-3 text-sm text-gray-300 leading-relaxed max-w-xs">Profite d’avantages exclusifs dans l’app TaVue.</p>
+        <h3
+          class="text-2xl font-semibold text-primary tracking-wide leading-tight"
+        >
+          Notre application
+        </h3>
+        <p class="mt-3 text-sm text-primary leading-relaxed max-w-xs prose-sm">
+          Profite d'avantages exclusifs dans l'app TaVue.
+        </p>
 
         <!-- QR + Stores -->
         <div class="mt-4 flex items-start gap-4">
-          <!-- QR placeholder (kept consistent size) -->
-          <div class="w-24 h-24 bg-white rounded-sm grid place-items-center">
-            <!-- simplified QR style -->
-            <div class="w-20 h-20 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:6px_6px]"></div>
-          </div>
+          <!-- QR code image -->
+          <a href="#" class="hover:opacity-80 transition">
+            <img
+              src={`${QRCode.src}`}
+              alt="QR Code"
+              class="w-24 h-24 rounded-sm"
+            />
+          </a>
           <div class="flex flex-col gap-2">
-            <a href="#" class="inline-flex items-center gap-2 bg-white text-black rounded-md px-3 py-2 leading-none shadow-sm hover:opacity-90 transition">
-              <!-- Google Play badge style -->
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4"><path fill="#0F9D58" d="M1 3.5v17l11-8.5z"/><path fill="#FFCD40" d="M12 12L1 20.5 17 14z"/><path fill="#DB4437" d="M1 3.5L17 10l-5 2z"/><path fill="#4285F4" d="M17 10l5-2.5v9z"/></svg>
-              <span class="text-xs font-semibold">Google Play</span>
+            <a href="#" class="hover:opacity-80 transition">
+              <img
+                src={`${googleplay.src}`}
+                alt="Google Play"
+                class="h-10 w-auto"
+              />
             </a>
-            <a href="#" class="inline-flex items-center gap-2 bg-white text-black rounded-md px-3 py-2 leading-none shadow-sm hover:opacity-90 transition">
-              <!-- App Store badge style -->
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4"><path fill="currentColor" d="M17.5 13.5c-.3 1.6 1.4 2.1 1.5 2.1-.8 1.1-1.9 1.2-2.3 1.2-1 .1-1.8-.6-2.2-.6-.4 0-1 .6-1.7.6-1 .1-2-.6-2.5-1.6-1.1-2-.3-4.9.8-6.5.6-.8 1.3-1.3 2-1.3.8 0 1.3.4 2 .4.6 0 1.1-.4 1.9-.4.8 0 1.7.4 2.3 1.2-2 .9-1.9 3.2-1.8 3.5M14.9 6.1c.4-.5.7-1.2.6-1.9-.6 0-1.3.4-1.7.9-.4.5-.7 1.2-.6 1.9.6 0 1.3-.4 1.7-.9"/></svg>
-              <span class="text-xs font-semibold">App Store</span>
+            <a href="#" class="hover:opacity-80 transition">
+              <img
+                src={`${appstore.src}`}
+                alt="App Store"
+                class="h-10 w-auto"
+              />
             </a>
           </div>
         </div>
 
         <!-- Socials -->
-        <div class="mt-6 flex items-center gap-6 text-xl">
-          <a href="#" aria-label="Facebook" class="hover:text-primary transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M13.5 9H15V6h-1.5C11.6 6 11 7.1 11 8.4V10H9v3h2v7h3v-7h2.1l.4-3H14v-1c0-.6.4-1 1-1z"/></svg>
+        <div class="mt-6 flex items-center gap-6 text-xl text-gray-300">
+          <a
+            href="#"
+            aria-label="Facebook"
+            class="hover:text-primary transition-colors"
+          >
+            <img src={Facebook.src} alt="Facebook" class="w-8 h-8" />
           </a>
-          <a href="#" aria-label="Twitter" class="hover:text-primary transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M19.6 7.4c.5-1 .9-1.6 1-1.8-.5.3-1.2.6-2 .7.8-.5 1.4-1.2 1.6-2-.6.4-1.4.8-2.2 1-1.2-1.2-3.1-1.2-4.3 0-1 .9-1.3 2.3-.9 3.6-2.5-.1-4.7-1.3-6.2-3.1-.8 1.4-.4 3.2.9 4.1-.5 0-1-.1-1.4-.4 0 1.5 1 3 2.6 3.3-.5.1-1 .1-1.5 0 .4 1.3 1.7 2.2 3.1 2.3-1.2.9-2.7 1.4-4.2 1.4-.3 0-.5 0-.8-.1 1.5 1 3.3 1.6 5.2 1.6 6.3 0 9.8-5.4 9.6-10.2.6-.4 1.1-1 1.6-1.6z"/></svg>
+          <a
+            href="#"
+            aria-label="Twitter"
+            class="hover:text-primary transition-colors"
+          >
+            <img src={Twitter.src} alt="Twitter" class="w-8 h-8" />
           </a>
-          <a href="#" aria-label="Instagram" class="hover:text-primary transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm10 2c1.7 0 3 1.3 3 3v10c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2.2A2.8 2.8 0 1112 16.8 2.8 2.8 0 0112 9.2zM17.5 6.5a1 1 0 100 2 1 1 0 000-2z"/></svg>
+          <a
+            href="#"
+            aria-label="Instagram"
+            class="hover:text-primary transition-colors"
+          >
+            <img src={Insta.src} alt="Instagram" class="w-8 h-8" />
           </a>
-          <a href="#" aria-label="LinkedIn" class="hover:text-primary transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M4 3a2 2 0 100 4 2 2 0 000-4zM3 8h2.9v13H3V8zm6.2 0H12V9c.6-.9 1.7-1.5 3.1-1.5 2.7 0 4.3 1.8 4.3 4.9V21H16.5v-7c0-1.7-.7-2.8-2.2-2.8-1.3 0-2 .9-2.3 1.8 0 .2-.1.6-.1.9V21H9.2V8z"/></svg>
+          <a
+            href="#"
+            aria-label="LinkedIn"
+            class="hover:text-primary transition-colors"
+          >
+            <img src={LinkedIn.src} alt="LinkedIn" class="w-8 h-8" />
           </a>
         </div>
       </div>
     </div>
 
     <!-- Divider -->
-    <div class="mt-10 border-t border-gray-800"></div>
+    <div class="mt-10 border-t border-white/10"></div>
 
     <!-- Bottom features -->
-    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-800">
+    <div
+      class="mt-6 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10 justify-items-center"
+    >
       <!-- Feature 1 -->
-      <div class="flex items-center gap-4 py-4 pr-6">
-        <div class="h-9 w-9 rounded-full bg-primary text-black grid place-items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M12 2l2.1 6.5H21l-5.5 4 2 6.5L12 15l-5.5 4 2-6.5L3 8.5h6.9z"/></svg>
+      <div
+        class="flex items-center gap-4 py-4 pr-6 hover:bg-white/5 rounded-md transition-colors"
+      >
+        <div
+          class="h-9 w-9 rounded-full bg-primary text-black grid place-items-center shadow-sm"
+        >
+          <img src={validation.src} alt="Validation" class="w-5 h-5" />
         </div>
         <div>
-          <p class="text-sm font-semibold">Fabrication française</p>
-          <p class="text-xs text-gray-300">100% Made in France</p>
+          <p class="text-sm font-semibold label">Fabrication française</p>
+          <p class="text-xs text-gray-400 label-text-alt">
+            100% Made in France
+          </p>
         </div>
       </div>
 
       <!-- Feature 2 -->
-      <div class="flex items-center gap-4 py-4 px-6">
-        <div class="h-9 w-9 rounded-full bg-primary text-black grid place-items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M3 6h13l5 6v6a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2zm13 0v6h6"/></svg>
+      <div
+        class="flex items-center gap-4 py-4 px-6 hover:bg-white/5 rounded-md transition-colors"
+      >
+        <div
+          class="h-9 w-9 rounded-full bg-primary text-black grid place-items-center shadow-sm"
+        >
+          <img src={temps.src} alt="Temps" class="w-5 h-5" />
         </div>
         <div>
-          <p class="text-sm font-semibold">Livraison 72h</p>
-          <p class="text-xs text-gray-300">Livraison offerte dès 150€</p>
+          <p class="text-sm font-semibold label">Livraison 72h</p>
+          <p class="text-xs text-gray-400 label-text-alt">
+            Livraison offerte dès 150€
+          </p>
         </div>
       </div>
 
       <!-- Feature 3 -->
-      <div class="flex items-center gap-4 py-4 pl-6">
-        <div class="h-9 w-9 rounded-full bg-primary text-black grid place-items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M12 6V3L8 7l4 4V8a4 4 0 11-4 4H6a6 6 0 106-6z"/></svg>
+      <div
+        class="flex items-center gap-4 py-4 pl-6 hover:bg-white/5 rounded-md transition-colors"
+      >
+        <div
+          class="h-9 w-9 rounded-full bg-primary text-black grid place-items-center shadow-sm"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="white"
+            class="w-6 h-6"
+            ><path d="M12 6V3L8 7l4 4V8a4 4 0 11-4 4H6a6 6 0 106-6z"
+            ></path></svg
+          >
         </div>
         <div>
-          <p class="text-sm font-semibold">Retours gratuits</p>
-          <p class="text-xs text-gray-300">30 jours pour changer d'avis</p>
+          <p class="text-sm font-semibold label">Retours gratuits</p>
+          <p class="text-xs text-gray-400 label-text-alt">
+            30 jours pour changer d'avis
+          </p>
         </div>
       </div>
     </div>
   </div>
 </footer>
+
+<style>
+  /* Force tous les textes/liens du footer en blanc */
+  #site-footer
+    :where(h1, h2, h3, h4, h5, h6, p, li, a, span, strong, em, small, label) {
+    color: #fff;
+  }
+
+  /* Liens: toutes les variantes gardent le blanc */
+  #site-footer a,
+  #site-footer a:visited,
+  #site-footer a:hover,
+  #site-footer a:focus,
+  #site-footer a:active {
+    color: #fff;
+  }
+
+  /* Exception: badges sur fond blanc (Google Play / App Store) restent en texte noir */
+  #site-footer a.bg-white,
+  #site-footer a.bg-white:visited,
+  #site-footer a.bg-white:hover,
+  #site-footer a.bg-white:focus,
+  #site-footer a.bg-white:active {
+    color: #000;
+  }
+  #site-footer a.bg-white :where(span, svg) {
+    color: #000;
+  }
+</style>
