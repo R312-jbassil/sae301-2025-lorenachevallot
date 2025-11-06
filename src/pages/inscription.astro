@@ -173,6 +173,25 @@ import Google from "../assets/google.svg";
 
     const pb = new window.PocketBase(pbUrl);
 
+    // Tracker l'origine de la navigation
+    // Si on vient d'une page autre que connexion/inscription, la stocker dans sessionStorage
+    const referrer = document.referrer;
+    if (
+        referrer &&
+        !referrer.includes("/connexion") &&
+        !referrer.includes("/inscription")
+    ) {
+        try {
+            const referrerUrl = new URL(referrer);
+            const path = referrerUrl.pathname;
+            if (path !== "/" && path !== "") {
+                sessionStorage.setItem("authOrigin", path);
+            }
+        } catch (e) {
+            console.error("Erreur lors du parsing du referrer:", e);
+        }
+    }
+
     // Fonction pour enregistrer les cookies
     function setCookie(name, value, days = 7) {
         const date = new Date();
@@ -184,39 +203,40 @@ import Google from "../assets/google.svg";
 
     // Fonction pour déterminer la URL de redirection
     function getRedirectUrl() {
+        // Vérifier si une origine a été stockée dans sessionStorage
+        const authOrigin = sessionStorage.getItem("authOrigin");
+        if (authOrigin) {
+            sessionStorage.removeItem("authOrigin");
+            return authOrigin;
+        }
+
         // Récupère l'URL du document référent
         const referrer = document.referrer;
 
-        // Vérifiez si l'utilisateur vient de la page de connexion ou d'inscription
+        // Si le referrer vient de connexion ou inscription, rediriger vers l'accueil
         if (
-            referrer.includes("/connexion") ||
-            referrer.includes("/inscription")
+            referrer &&
+            (referrer.includes("/connexion") ||
+                referrer.includes("/inscription"))
         ) {
             return "/";
         }
 
-        // Si le referrer est vide ou du même domaine, rediriger vers /configurateur
-        if (referrer === "" || !referrer) {
-            return "/configurateur";
-        }
-
-        // Extrait le chemin du referrer
-        try {
-            const referrerUrl = new URL(referrer);
-            const path = referrerUrl.pathname;
-
-            // Si le chemin n'est pas /connexion ou /inscription, rediriger vers ce chemin
-            if (
-                !path.includes("/connexion") &&
-                !path.includes("/inscription")
-            ) {
-                return path;
+        // Si le referrer existe et ne vient pas de connexion/inscription, retourner le chemin
+        if (referrer) {
+            try {
+                const referrerUrl = new URL(referrer);
+                const path = referrerUrl.pathname;
+                if (path !== "/" && path !== "") {
+                    return path;
+                }
+            } catch (e) {
+                console.error("Erreur lors du parsing du referrer:", e);
             }
-        } catch (e) {
-            console.error("Erreur lors du parsing du referrer:", e);
         }
 
-        return "/configurateur";
+        // Par défaut, rediriger vers l'accueil
+        return "/";
     }
 
     const form = document.getElementById("registerForm");

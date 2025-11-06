@@ -315,6 +315,15 @@
                     saveBtn.removeAttribute("disabled");
                 }, 2000);
             } catch (error) {
+                // Gérer la redirection vers la connexion
+                if (
+                    error instanceof Error &&
+                    error.message === "__REDIRECT_TO_LOGIN__"
+                ) {
+                    window.location.href = "/connexion";
+                    return;
+                }
+
                 console.error("Erreur complète:", error);
                 const errorMsg =
                     error instanceof Error ? error.message : String(error);

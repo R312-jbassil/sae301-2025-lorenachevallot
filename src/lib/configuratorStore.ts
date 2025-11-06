@@ -272,7 +272,8 @@ export async function saveToPocketBase(name: string): Promise<void> {
 
         // Vérifier que nous avons un utilisateur valide
         if (!userId) {
-            throw new Error('Utilisateur non connecté. Veuillez vous connecter avant de sauvegarder.');
+            // Rediriger vers la page de connexion sans afficher de message
+            throw new Error('__REDIRECT_TO_LOGIN__');
         }
 
         // Calculer la valeur hex de la teinte des verres depuis l'état courant

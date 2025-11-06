@@ -2,7 +2,7 @@
 // URL de PocketBase
 const pbUrl = window.location.hostname === 'localhost'
     ? 'http://127.0.0.1:8090'
-    : 'https://sae-301.lorena-chevallot.fr:8084';
+    : 'https://sae-301.lorena-chevallot.fr';
 
 // Créer une instance PocketBase via CDN
 export async function initPocketBase() {
