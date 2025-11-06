@@ -13,7 +13,7 @@ export function getPocketBaseUrl(): string {
         // Local development
         return 'http://127.0.0.1:8090';
     }
-    
+
     // Client-side fallback (shouldn't be reached, but just in case)
     return 'https://sae-301.lorena-chevallot.fr:8084';
 }
