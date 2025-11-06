@@ -1,4 +1,6 @@
 - Nom: CHEVALLOT
 - Prénom: Loréna
 - URL pocketbase: https://sae-301.lorena-chevallot.fr/_/
+- Email : admin@admin.com
+- MDP : MdpAdminSae301
 - URL: sae-301.lorena-chevallot.fr
