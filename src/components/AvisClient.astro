@@ -1,0 +1,138 @@
+---
+interface Props {}
+
+const testimonials = [
+	{
+		name: "Julien T.",
+		rating: 5,
+		text: "Une paire qui sort vraiment de l'ordinaire. La qualité est impeccable, le confort exceptionnel et surtout le style est totalement unique. Enfin des lunettes qui me ressemblent vraiment !",
+	},
+	{
+		name: "Sébastien S.",
+		rating: 5,
+		text: "Créatif, unique et différent ! C'est exactement ce que j'imaginais. La personnalisation du configurateur est incroyable et les résultats dépassent mes attentes.",
+	},
+	{
+		name: "Mathieu R.",
+		rating: 5,
+		text: "Une belle surprise à la réception. Le produit est vraiment différent et de haute qualité. C'est agréable à porter au quotidien et les compliments arrivent régulièrement !",
+	},
+	{
+		name: "Emilie A.",
+		rating: 5,
+		text: "Un très beau produit ! La qualité est exceptionnelle et le design sublime. Je suis extrêmement satisfaite de mon achat. C'est vraiment le meilleur site de lunettes personnalisées.",
+	},
+	{
+		name: "Laura M.",
+		rating: 5,
+		text: "Expérience formidable du début à la fin. Le configurateur est intuitif, l'équipe est réactive et précise. Mes lunettes sont parfaites et je les adore !",
+	},
+	{
+		name: "Nicolas P.",
+		rating: 5,
+		text: "Livraison rapide et emballage soigné. Les lunettes correspondent exactement à mes attentes. Fabrication impeccable et attention aux détails remarquable. Je recommande vivement !",
+	},
+	{
+		name: "Sophie D.",
+		rating: 5,
+		text: "Enfin des lunettes qui me ressemblent vraiment ! La personnalisation est incroyable et les finitions sont haut de gamme. TaVue a révolutionné ma vision des accessoires.",
+	},
+	{
+		name: "Marc L.",
+		rating: 5,
+		text: "Service client attentif et réactif. Le produit est d'une qualité supérieure avec une attention aux détails remarquable. Je suis ravi et j'en parle à tous mes amis !",
+	},
+	{
+		name: "Amélie C.",
+		rating: 5,
+		text: "Design français authentique et fabrication irréprochable. Ces lunettes sont un véritable investissement de qualité. Très satisfaite et fière de mon achat !",
+	},
+	{
+		name: "Thomas B.",
+		rating: 5,
+		text: "Une démarche éco-responsable avec une qualité sans compromis. TaVue représente l'avenir de l'industrie. Produit magnifique et valeurs alignées avec les miennes.",
+	},
+];
+---
+
+<div class="w-full bg-white">
+	<!-- Testimonials Carousel Container -->
+	<div class="w-full overflow-x-auto pb-4">
+		<div class="flex gap-6 min-w-max px-6">
+			{
+				testimonials.map((testimonial) => (
+					<div class="w-96 shrink-0 p-6 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow">
+						<!-- Stars -->
+						<div class="flex gap-1 mb-4">
+							{[...Array(testimonial.rating)].map(() => (
+								<span class="text-yellow-400">★</span>
+							))}
+						</div>
+
+						<!-- Name -->
+						<h3 class="font-bold text-black mb-3">{testimonial.name}</h3>
+
+						<!-- Text -->
+						<p class="text-sm text-gray-600 line-clamp-4">
+							{testimonial.text}
+						</p>
+					</div>
+				))
+			}
+		</div>
+	</div>
+
+	<!-- Navigation Buttons -->
+	<div class="flex justify-center gap-4 mt-8">
+		<button
+			class="p-2 border border-gray-300 rounded-full hover:bg-gray-50 transition"
+			id="scroll-left"
+		>
+			<svg
+				class="w-5 h-5"
+				fill="none"
+				stroke="currentColor"
+				viewBox="0 0 24 24"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M15 19l-7-7 7-7"></path>
+			</svg>
+		</button>
+		<button
+			class="p-2 border border-gray-300 rounded-full hover:bg-gray-50 transition"
+			id="scroll-right"
+		>
+			<svg
+				class="w-5 h-5"
+				fill="none"
+				stroke="currentColor"
+				viewBox="0 0 24 24"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M9 5l7 7-7 7"></path>
+			</svg>
+		</button>
+	</div>
+</div>
+
+<script>
+	const container = document.querySelector(".overflow-x-auto");
+	const leftBtn = document.getElementById("scroll-left");
+	const rightBtn = document.getElementById("scroll-right");
+
+	if (leftBtn && rightBtn && container) {
+		leftBtn.addEventListener("click", () => {
+			container.scrollBy({ left: -400, behavior: "smooth" });
+		});
+
+		rightBtn.addEventListener("click", () => {
+			container.scrollBy({ left: 400, behavior: "smooth" });
+		});
+	}
+</script>
