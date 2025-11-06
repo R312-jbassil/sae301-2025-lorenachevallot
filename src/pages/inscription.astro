@@ -162,7 +162,10 @@ import Google from "../assets/google.svg";
 </Layout>
 
 <script type="module">
-    import pb from "../lib/pocketbase";
+    import { getPocketBaseUrl } from "../lib/pocketbase";
+    import PocketBase from "https://cdn.jsdelivr.net/npm/pocketbase@latest/dist/pocketbase.es.mjs";
+
+    const pb = new PocketBase(getPocketBaseUrl());
 
     // Fonction pour enregistrer les cookies
     function setCookie(name, value, days = 7) {

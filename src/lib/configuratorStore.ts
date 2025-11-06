@@ -241,7 +241,9 @@ export async function saveToPocketBase(name: string): Promise<void> {
         // Nous ferons la recherche après l'authentification PocketBase.
 
         // Import PocketBase depuis la configuration centralisée
-        const pb = (await import('./pocketbase')).default;
+        const { getPocketBaseUrl } = await import('./pocketbase');
+        const { default: PocketBase } = await import('pocketbase');
+        const pb = new PocketBase(getPocketBaseUrl());
 
         // Récupérer l'ID utilisateur depuis les cookies
         function getCookie(name: string): string | null {
