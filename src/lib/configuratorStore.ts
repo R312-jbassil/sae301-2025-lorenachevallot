@@ -423,14 +423,18 @@ export async function saveToPocketBase(name: string): Promise<void> {
             id_utilisateur: userId,
         };
 
-        // Ajouter les IDs des matériaux s'ils sont disponibles
-        if (montureMateriauId) {
+        // Ajouter les IDs des matériaux s'ils sont disponibles et valides (pas les IDs par défaut)
+        if (montureMateriauId && !montureMateriauId.startsWith('default_')) {
             modelData.id_materiau_monture = montureMateriauId;
             console.log('Matériau monture ajouté au modèle:', montureMateriauId);
+        } else {
+            console.log('Matériau monture invalide ou par défaut, non ajouté:', montureMateriauId);
         }
-        if (branchesMateriauId) {
+        if (branchesMateriauId && !branchesMateriauId.startsWith('default_')) {
             modelData.id_materiau_branche = branchesMateriauId;
             console.log('Matériau branches ajouté au modèle:', branchesMateriauId);
+        } else {
+            console.log('Matériau branches invalide ou par défaut, non ajouté:', branchesMateriauId);
         }
 
         console.log('Données du modèle:', modelData);
@@ -454,6 +458,11 @@ export async function saveToPocketBase(name: string): Promise<void> {
                     state.modelId = modelRecord.id;
                     saveConfigurator(state);
                 } else {
+                    console.error('Erreur de mise à jour du modèle:', {
+                        status: updateError?.status,
+                        message: updateError?.message,
+                        validationErrors: updateError?.data?.data
+                    });
                     throw updateError;
                 }
             }
