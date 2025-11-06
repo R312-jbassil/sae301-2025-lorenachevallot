@@ -260,7 +260,55 @@ import Google from "../assets/google.svg";
 
             console.log("Utilisateur créé:", userData);
 
-            // Envoi email de vérification
+            // Connecter directement l'utilisateur après l'inscription
+            try {
+                const authData = await pb
+                    .collection("utilisateur")
+                    .authWithPassword(email, password);
+                console.log("Utilisateur connecté automatiquement:", authData);
+
+                // Enregistrez les informations de connexion dans les cookies
+                setCookie("pb_token", pb.authStore.token);
+                setCookie("pb_user_id", pb.authStore.model.id);
+                setCookie("pb_user_email", pb.authStore.model.email);
+                setCookie(
+                    "pb_user_name",
+                    pb.authStore.model.prenom || pb.authStore.model.email,
+                );
+
+                // Optionnel : enregistrez si vous cochez "Se souvenir de moi"
+                if (document.getElementById("remember").checked) {
+                    setCookie("pb_remember_me", "true", 30); // 30 jours
+                }
+
+                document.getElementById("msg").textContent =
+                    "Inscription réussie ! Redirection en cours...";
+                document.getElementById("msg").classList.remove("text-error");
+                document.getElementById("msg").classList.add("text-success");
+
+                // Redirection après 1 seconde
+                setTimeout(() => {
+                    location.href = getRedirectUrl();
+                }, 1000);
+            } catch (authErr) {
+                console.error(
+                    "Erreur lors de la connexion automatique:",
+                    authErr,
+                );
+
+                // En cas d'erreur d'authentification, demander l'email de vérification
+                document.getElementById("msg").textContent =
+                    "Inscription réussie, vérifiez vos emails pour confirmer votre compte";
+                document.getElementById("msg").classList.remove("text-error");
+                document.getElementById("msg").classList.add("text-success");
+
+                // Redirection après 2 secondes vers connexion
+                setTimeout(() => {
+                    location.href = "/connexion";
+                }, 2000);
+            }
+
+            // Tentative d'envoi email de vérification (optionnel)
             try {
                 await pb.collection("utilisateur").requestVerification(email);
                 console.log("Email de vérification envoyé");
@@ -270,21 +318,6 @@ import Google from "../assets/google.svg";
                     emailErr,
                 );
             }
-
-            // Optionnel : enregistrez si vous cochez "Se souvenir de moi"
-            if (document.getElementById("remember").checked) {
-                setCookie("pb_remember_me", "true", 30); // 30 jours
-            }
-
-            document.getElementById("msg").textContent =
-                "Inscription réussie, vérifiez vos emails pour confirmer votre compte";
-            document.getElementById("msg").classList.remove("text-error");
-            document.getElementById("msg").classList.add("text-success");
-
-            // Redirection après 2 secondes
-            setTimeout(() => {
-                location.href = "/connexion";
-            }, 2000);
         } catch (err) {
             console.error("Erreur complète:", err);
             console.error("Status:", err.status);
