@@ -292,21 +292,19 @@
         if (!saveBtn) return;
 
         saveBtn.addEventListener("click", async () => {
-            const name = prompt("Nommez votre configuration:");
-            if (!name) return;
-
             // Afficher un état de chargement
             saveBtn.setAttribute("disabled", "true");
             const originalText = saveBtn.textContent;
             saveBtn.textContent = "Enregistrement...";
 
             try {
-                await saveToPocketBase(name);
+                // Appeler saveToPocketBase sans nom (il gérera l'affichage des modals)
+                await saveToPocketBase("");
                 saveBtn.textContent = "✓ Sauvegardé!";
                 // Afficher un message de succès
                 const msg = document.createElement("div");
                 msg.className = "alert alert-success mt-4";
-                msg.textContent = `Configuration "${name}" sauvegardée avec succès!`;
+                msg.textContent = `Configuration sauvegardée avec succès!`;
                 saveBtn.parentElement?.appendChild(msg);
                 setTimeout(() => {
                     msg.remove();

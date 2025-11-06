@@ -265,7 +265,41 @@ import Panier from "../assets/panier.svg";
         link.addEventListener("click", () => {
             menuToggle?.setAttribute("aria-expanded", "false");
             mobileMenu?.classList.add("hidden");
+            // Nettoyer le timestamp de chargement pour éviter les faux positifs
+            cleanupLoadTimestamp();
         });
+    });
+
+    // Nettoyer le timestamp de chargement pour les navigations normales
+    function cleanupLoadTimestamp() {
+        try {
+            const stored = localStorage.getItem("configurator_state");
+            if (stored) {
+                const state = JSON.parse(stored);
+                state.loadedAt = undefined;
+                localStorage.setItem(
+                    "configurator_state",
+                    JSON.stringify(state),
+                );
+                console.log("Timestamp de chargement nettoyé");
+            }
+        } catch (e) {
+            console.error("Erreur lors du nettoyage du timestamp:", e);
+        }
+    }
+
+    // Ajouter le nettoyage aux liens de navigation principaux aussi
+    // MAIS : Ne nettoyer que si on s'éloigne du configurateur (pas vers /configurateur ou /modeles)
+    const navLinks = document.querySelectorAll(
+        "nav a, a[href='/modeles'], a[href='/creations'], a[href='/']",
+    );
+    navLinks.forEach((link) => {
+        const href = link.getAttribute("href");
+        // Ne nettoyer que si on quitte le configurateur ou arrive depuis une autre page
+        // Pas besoin de nettoyer avant d'aller vers /configurateur ou /modeles
+        if (href !== "/configurateur" && href !== "/modeles") {
+            link.addEventListener("click", cleanupLoadTimestamp);
+        }
     });
 
     // Listen for auth changes (via storage events for cross-tab sync)

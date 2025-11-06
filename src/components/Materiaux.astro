@@ -1,37 +1,51 @@
 ---
+interface Materiau {
+    id: string;
+    libelle: string;
+}
+
 interface Props {
     onMaterialsChange?: (materials: {
+        montureId: string;
         montureType: string;
+        branchesId: string;
         branchesType: string;
     }) => void;
 }
 
 const { onMaterialsChange } = Astro.props;
 
-const materials = {
-    monture: [
-        {
-            name: "Acétate de cellulose",
-            description: "Léger, confortable, hypoallergénique",
-        },
-        {
-            name: "Titane",
-            description: "Ultra-résistant, léger, durable",
-        },
-        { name: "Inox", description: "Robuste, flexible, anti-corrosion" },
-    ],
-    branches: [
-        {
-            name: "Acétate de cellulose",
-            description: "Léger, confortable, hypoallergénique",
-        },
-        {
-            name: "Titane",
-            description: "Ultra-résistant, léger, durable",
-        },
-        { name: "Inox", description: "Robuste, flexible, anti-corrosion" },
-    ],
-};
+// Récupérer les matériaux depuis PocketBase
+let materials: Materiau[] = [];
+try {
+    const response = await fetch(
+        "http://127.0.0.1:8090/api/collections/materiau/records",
+    );
+    if (response.ok) {
+        const data = await response.json();
+        materials = data.items || [];
+        console.log("[Materiaux] Matériaux chargés:", materials);
+    } else {
+        console.error(
+            "[Materiaux] Erreur lors du chargement des matériaux:",
+            response.status,
+        );
+    }
+} catch (error) {
+    console.error(
+        "[Materiaux] Erreur lors de la récupération des matériaux:",
+        error,
+    );
+}
+
+// Si pas de matériaux trouvés, utiliser les valeurs par défaut
+if (materials.length === 0) {
+    materials = [
+        { id: "default_acetate", libelle: "Acétate de cellulose" },
+        { id: "default_titane", libelle: "Titane" },
+        { id: "default_inox", libelle: "Inox" },
+    ];
+}
 ---
 
 <div class="w-full">
@@ -61,22 +75,24 @@ const materials = {
                                 class="collapse-title w-full justify-between text-black cursor-pointer font-medium"
                                 id="monture-button"
                             >
-                                <span>Acétate de cellulose</span>
+                                <span
+                                    >{
+                                        materials[0]?.libelle || "Chargement..."
+                                    }</span
+                                >
                             </div>
                             <div class="collapse-content bg-base-100">
                                 <div class="space-y-2 pt-2">
                                     {
-                                        materials.monture.map((material) => (
+                                        materials.map((material) => (
                                             <button
                                                 class="monture-option w-full p-3 text-left hover:bg-base-200 rounded-lg transition-colors block"
-                                                data-name={material.name}
+                                                data-id={material.id}
+                                                data-name={material.libelle}
                                             >
                                                 <div class="flex flex-col gap-1">
                                                     <span class="font-medium text-black">
-                                                        {material.name}
-                                                    </span>
-                                                    <span class="text-sm text-gray-500">
-                                                        {material.description}
+                                                        {material.libelle}
                                                     </span>
                                                 </div>
                                             </button>
@@ -98,22 +114,24 @@ const materials = {
                                 class="collapse-title w-full justify-between text-black cursor-pointer font-medium"
                                 id="branches-button"
                             >
-                                <span>Acétate de cellulose</span>
+                                <span
+                                    >{
+                                        materials[0]?.libelle || "Chargement..."
+                                    }</span
+                                >
                             </div>
                             <div class="collapse-content bg-base-100">
                                 <div class="space-y-2 pt-2">
                                     {
-                                        materials.branches.map((material) => (
+                                        materials.map((material) => (
                                             <button
                                                 class="branches-option w-full p-3 text-left hover:bg-base-200 rounded-lg transition-colors block"
-                                                data-name={material.name}
+                                                data-id={material.id}
+                                                data-name={material.libelle}
                                             >
                                                 <div class="flex flex-col gap-1">
                                                     <span class="font-medium text-black">
-                                                        {material.name}
-                                                    </span>
-                                                    <span class="text-sm text-gray-500">
-                                                        {material.description}
+                                                        {material.libelle}
                                                     </span>
                                                 </div>
                                             </button>
@@ -128,27 +146,10 @@ const materials = {
                     <div
                         class="bg-gray-50 rounded-lg p-4 space-y-2 border border-base-300"
                     >
-                        <div class="text-sm">
-                            <span class="font-semibold text-black"
-                                >Acétate:</span
-                            >
-                            <span class="text-gray-600 ml-2">
-                                Léger, confortable, hypoallergénique
-                            </span>
-                        </div>
-                        <div class="text-sm">
-                            <span class="font-semibold text-black">Titane:</span
-                            >
-                            <span class="text-gray-600 ml-2">
-                                Ultra-résistant, léger, durable
-                            </span>
-                        </div>
-                        <div class="text-sm">
-                            <span class="font-semibold text-black">Inox:</span>
-                            <span class="text-gray-600 ml-2">
-                                Robuste, flexible, anti-corrosion
-                            </span>
-                        </div>
+                        <p class="text-sm text-gray-600">
+                            Sélectionnez les matériaux pour votre monture et vos
+                            branches
+                        </p>
                     </div>
                 </div>
             </div>
@@ -173,33 +174,192 @@ const materials = {
             const branchesOptions =
                 document.querySelectorAll(".branches-option");
 
+            // Stocker les IDs et les noms sélectionnés
+            let selectedMontureId =
+                montureOptions[0]?.getAttribute("data-id") || "";
+            let selectedMontureType =
+                montureOptions[0]?.getAttribute("data-name") || "";
+            let selectedBranchesId =
+                branchesOptions[0]?.getAttribute("data-id") || "";
+            let selectedBranchesType =
+                branchesOptions[0]?.getAttribute("data-name") || "";
+
             // Initialiser le premier élément comme sélectionné
             (montureOptions[0] as HTMLElement)?.classList.add("bg-base-200");
             (branchesOptions[0] as HTMLElement)?.classList.add("bg-base-200");
 
-            function emitChanges() {
-                const montureSpan =
-                    montureButton?.querySelector("span:first-child");
-                const branchesSpan =
-                    branchesButton?.querySelector("span:first-child");
+            // Charger l'état depuis le localStorage si disponible
+            function initializeFromStorage() {
+                try {
+                    const stored = localStorage.getItem("configurator_state");
+                    if (stored) {
+                        const state = JSON.parse(stored);
+                        if (state.materiaux) {
+                            console.log(
+                                "[Materiaux] Initialisation depuis localStorage:",
+                                state.materiaux,
+                            );
 
-                const montureType = montureSpan?.textContent || "";
-                const branchesType = branchesSpan?.textContent || "";
+                            // Gérer la monture
+                            if (
+                                state.materiaux.montureId ||
+                                state.materiaux.montureType
+                            ) {
+                                let foundOption = null;
+
+                                // D'abord chercher par ID
+                                if (state.materiaux.montureId) {
+                                    foundOption = Array.from(
+                                        montureOptions,
+                                    ).find(
+                                        (option) =>
+                                            option.getAttribute("data-id") ===
+                                            state.materiaux.montureId,
+                                    );
+                                }
+
+                                // Si pas trouvé par ID, chercher par libellé
+                                if (
+                                    !foundOption &&
+                                    state.materiaux.montureType
+                                ) {
+                                    foundOption = Array.from(
+                                        montureOptions,
+                                    ).find(
+                                        (option) =>
+                                            option.getAttribute("data-name") ===
+                                            state.materiaux.montureType,
+                                    );
+                                }
+
+                                // Si trouvé, sélectionner
+                                if (foundOption) {
+                                    selectedMontureId =
+                                        foundOption.getAttribute("data-id") ||
+                                        "";
+                                    selectedMontureType =
+                                        foundOption.getAttribute("data-name") ||
+                                        "";
+
+                                    const montureSpan =
+                                        montureButton?.querySelector(
+                                            "span:first-child",
+                                        );
+                                    if (montureSpan) {
+                                        montureSpan.textContent =
+                                            selectedMontureType;
+                                    }
+                                    montureOptions.forEach((opt) =>
+                                        opt.classList.remove("bg-base-200"),
+                                    );
+                                    (foundOption as HTMLElement).classList.add(
+                                        "bg-base-200",
+                                    );
+                                    console.log(
+                                        "[Materiaux] Monture sélectionnée:",
+                                        selectedMontureType,
+                                    );
+                                }
+                            }
+
+                            // Gérer les branches
+                            if (
+                                state.materiaux.branchesId ||
+                                state.materiaux.branchesType
+                            ) {
+                                let foundOption = null;
+
+                                // D'abord chercher par ID
+                                if (state.materiaux.branchesId) {
+                                    foundOption = Array.from(
+                                        branchesOptions,
+                                    ).find(
+                                        (option) =>
+                                            option.getAttribute("data-id") ===
+                                            state.materiaux.branchesId,
+                                    );
+                                }
+
+                                // Si pas trouvé par ID, chercher par libellé
+                                if (
+                                    !foundOption &&
+                                    state.materiaux.branchesType
+                                ) {
+                                    foundOption = Array.from(
+                                        branchesOptions,
+                                    ).find(
+                                        (option) =>
+                                            option.getAttribute("data-name") ===
+                                            state.materiaux.branchesType,
+                                    );
+                                }
+
+                                // Si trouvé, sélectionner
+                                if (foundOption) {
+                                    selectedBranchesId =
+                                        foundOption.getAttribute("data-id") ||
+                                        "";
+                                    selectedBranchesType =
+                                        foundOption.getAttribute("data-name") ||
+                                        "";
+
+                                    const branchesSpan =
+                                        branchesButton?.querySelector(
+                                            "span:first-child",
+                                        );
+                                    if (branchesSpan) {
+                                        branchesSpan.textContent =
+                                            selectedBranchesType;
+                                    }
+                                    branchesOptions.forEach((opt) =>
+                                        opt.classList.remove("bg-base-200"),
+                                    );
+                                    (foundOption as HTMLElement).classList.add(
+                                        "bg-base-200",
+                                    );
+                                    console.log(
+                                        "[Materiaux] Branches sélectionnées:",
+                                        selectedBranchesType,
+                                    );
+                                }
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.error(
+                        "[Materiaux] Erreur lors de la lecture du localStorage:",
+                        e,
+                    );
+                }
+            }
+
+            function emitChanges() {
+                console.log("[Materiaux] Changements détectés:", {
+                    montureId: selectedMontureId,
+                    montureType: selectedMontureType,
+                    branchesId: selectedBranchesId,
+                    branchesType: selectedBranchesType,
+                });
 
                 updateMaterialaux({
-                    montureType,
-                    branchesType,
+                    montureId: selectedMontureId,
+                    montureType: selectedMontureType,
+                    branchesId: selectedBranchesId,
+                    branchesType: selectedBranchesType,
                 });
             }
 
             montureOptions.forEach((option) => {
                 option.addEventListener("click", () => {
+                    const id = option.getAttribute("data-id");
                     const name = option.getAttribute("data-name");
                     const montureSpan =
                         montureButton?.querySelector("span:first-child");
-                    if (montureSpan) {
+                    if (montureSpan && name) {
                         montureSpan.textContent = name;
                     }
+                    selectedMontureId = id || "";
+                    selectedMontureType = name || "";
                     // Retirer le fond de tous les éléments
                     montureOptions.forEach((opt) => {
                         opt.classList.remove("bg-base-200");
@@ -215,12 +375,15 @@ const materials = {
 
             branchesOptions.forEach((option) => {
                 option.addEventListener("click", () => {
+                    const id = option.getAttribute("data-id");
                     const name = option.getAttribute("data-name");
                     const branchesSpan =
                         branchesButton?.querySelector("span:first-child");
-                    if (branchesSpan) {
+                    if (branchesSpan && name) {
                         branchesSpan.textContent = name;
                     }
+                    selectedBranchesId = id || "";
+                    selectedBranchesType = name || "";
                     // Retirer le fond de tous les éléments
                     branchesOptions.forEach((opt) => {
                         opt.classList.remove("bg-base-200");
@@ -233,6 +396,13 @@ const materials = {
                     emitChanges();
                 });
             });
+
+            // Initialiser les changements au chargement
+            // Attendre un peu pour que les options soient chargées depuis l'API
+            setTimeout(() => {
+                initializeFromStorage();
+                emitChanges();
+            }, 100);
         </script>
     </div>
 </div>

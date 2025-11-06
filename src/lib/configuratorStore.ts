@@ -1,7 +1,11 @@
 // Store for configurator state management
 export interface ConfiguratorState {
+    modelId?: string; // ID du modèle en cours d'édition
+    loadedAt?: number; // Timestamp du chargement du modèle (pour éviter les faux positifs lors du chargement initial)
     materiaux: {
+        montureId?: string;
         montureType?: string;
+        branchesId?: string;
         branchesType?: string;
     };
     couleurs: {
@@ -39,8 +43,11 @@ export function getConfigurator(): ConfiguratorState {
 
 export function getDefaultState(): ConfiguratorState {
     return {
+        modelId: undefined,
         materiaux: {
+            montureId: '',
             montureType: 'Acétate de cellulose',
+            branchesId: '',
             branchesType: 'Acétate de cellulose',
         },
         couleurs: {
@@ -229,7 +236,11 @@ export async function saveToPocketBase(name: string): Promise<void> {
     try {
         const state = getConfigurator();
 
-        // Import PocketBase dynamiquement
+        // Vérifier si l'utilisateur possède déjà une paire identique (mêmes paramètres)
+        // Si oui, proposer de modifier cette paire ou d'en créer une nouvelle.
+        // Nous ferons la recherche après l'authentification PocketBase.
+
+        // Import PocketBase (si pas déjà importé)
         const { default: PocketBase } = await import('pocketbase');
         const pb = new PocketBase('http://127.0.0.1:8090');
 
@@ -266,6 +277,115 @@ export async function saveToPocketBase(name: string): Promise<void> {
             throw new Error('Utilisateur non connecté. Veuillez vous connecter avant de sauvegarder.');
         }
 
+        // Calculer la valeur hex de la teinte des verres depuis l'état courant
+        const verresFillCheck = colorMap[state.couleurs.verres || 'Transparent'] || 'rgba(202, 201, 243, 0.4)';
+        let teintHexValueCheck = verresFillCheck;
+        if (verresFillCheck.includes('rgba')) {
+            teintHexValueCheck = '#CAC9F3';
+        }
+
+        // Vérifier si l'utilisateur possède déjà des modèles sauvegardés
+        let userModels: any[] = [];
+        try {
+            const listResp = await pb.collection('modele').getList(1, 200, {
+                filter: `id_utilisateur="${userId}"`,
+            });
+            userModels = listResp.items || [];
+            console.log('Modèles trouvés pour cet utilisateur:', userModels.length);
+        } catch (err) {
+            console.warn('Erreur lors de la recherche des modèles:', err);
+        }
+
+        // Vérifier si on vient de charger un modèle (moins d'1 seconde)
+        const now = Date.now();
+        const loadedAt = (state.loadedAt || 0);
+        const isRecentlyLoaded = (now - loadedAt) < 1000;
+        console.log('Modèle récemment chargé ?', isRecentlyLoaded, 'Temps écoulé:', now - loadedAt, 'ms');
+
+        // Si l'utilisateur possède déjà des modèles ET ce n'est PAS une modification en cours (modèle récemment chargé)
+        if (userModels.length > 0 && !isRecentlyLoaded) {
+            console.log('L\'utilisateur possède des paires existantes et n\'est pas en modification');
+
+            // Afficher le modal avec la liste des modèles et le choix modifier/créer
+            const choice = await (window as any).showSaveChoiceModal?.(userModels);
+            console.log('Choix utilisateur:', choice);
+
+            if (choice && choice.action === 'update') {
+                // L'utilisateur veut modifier une paire existante
+                console.log('Modification du modèle:', choice.modelId);
+                state.modelId = choice.modelId;
+                state.loadedAt = now; // Mettre à jour le timestamp pour marquer le chargement
+                saveConfigurator(state);
+                const selectedModel = userModels.find((m: any) => m.id === choice.modelId);
+                name = selectedModel?.titre || 'Sans nom';
+            } else if (choice && choice.action === 'create') {
+                // L'utilisateur veut créer une nouvelle paire
+                state.modelId = undefined; // Nettoyer le modelId
+                state.loadedAt = undefined;
+                saveConfigurator(state);
+                const newName = await (window as any).showSaveNameModal?.('');
+                if (!newName) {
+                    return;
+                }
+                name = newName;
+            } else {
+                return;
+            }
+        } else if (state.modelId && isRecentlyLoaded) {
+            // L'utilisateur modifie un modèle qu'il vient de charger
+            console.log('Modèle en cours de modification:', state.modelId);
+            try {
+                const existingModel = await pb.collection('modele').getOne(state.modelId);
+                name = existingModel.titre;
+                console.log('Titre du modèle existant retrouvé:', name);
+            } catch (err) {
+                console.warn('Impossible de récupérer le modèle existant:', err);
+                state.modelId = undefined;
+                state.loadedAt = undefined;
+                saveConfigurator(state);
+                // Demander un nouveau nom
+                const newName = await (window as any).showSaveNameModal?.('');
+                if (!newName) return;
+                name = newName;
+            }
+        } else {
+            // Pas de modèle existant, juste demander le nom de la nouvelle paire
+            console.log('Aucune paire existante, demander le nom');
+            state.modelId = undefined;
+            state.loadedAt = undefined;
+            saveConfigurator(state);
+            if (!name) {
+                const newName = await (window as any).showSaveNameModal?.('');
+                if (!newName) {
+                    return;
+                }
+                name = newName;
+            }
+        }
+
+        // Récupérer les IDs des matériaux en fonction de leurs noms (libellés)
+        console.log('Récupération des IDs des matériaux...');
+        let montureMateriauId = state.materiaux.montureId || '';
+        let branchesMateriauId = state.materiaux.branchesId || '';
+
+        try {
+            // Si les IDs ne sont pas stockés, chercher par libellé
+            if (!montureMateriauId && state.materiaux.montureType) {
+                const montureResponse = await pb.collection('materiau').getFirstListItem(`libelle="${state.materiaux.montureType}"`);
+                montureMateriauId = montureResponse.id;
+                console.log('Matériau monture trouvé:', montureMateriauId);
+            }
+
+            if (!branchesMateriauId && state.materiaux.branchesType) {
+                const branchesResponse = await pb.collection('materiau').getFirstListItem(`libelle="${state.materiaux.branchesType}"`);
+                branchesMateriauId = branchesResponse.id;
+                console.log('Matériau branches trouvé:', branchesMateriauId);
+            }
+        } catch (error) {
+            console.warn('Erreur lors de la recherche des matériaux par libellé:', error);
+            // Continuer même si on ne trouve pas les matériaux
+        }
+
         // Créer l'enregistrement dans la collection sauvegarde
         console.log('Tentative de création de sauvegarde avec userId:', userId);
         const svgCode = generateSvgString(state);
@@ -294,6 +414,7 @@ export async function saveToPocketBase(name: string): Promise<void> {
             code_svg: generateSvgString(state),
             couleur_monture: state.couleurs.monture || '',
             couleur_branches: state.couleurs.branches || '',
+            couleur_verres: state.couleurs.verres || '',
             finition: state.finitions.type || '',
             largeur_verres: state.tailles.largeurVerres || 0,
             hauteur_verres: state.tailles.hauteurVerres || 0,
@@ -303,10 +424,49 @@ export async function saveToPocketBase(name: string): Promise<void> {
             id_utilisateur: userId,
         };
 
-        console.log('Données du modèle:', modelData);
-        const modelRecord = await pb.collection('modele').create(modelData);
+        // Ajouter les IDs des matériaux s'ils sont disponibles
+        if (montureMateriauId) {
+            modelData.id_materiau_monture = montureMateriauId;
+            console.log('Matériau monture ajouté au modèle:', montureMateriauId);
+        }
+        if (branchesMateriauId) {
+            modelData.id_materiau_branche = branchesMateriauId;
+            console.log('Matériau branches ajouté au modèle:', branchesMateriauId);
+        }
 
-        console.log('Modèle créé avec succès:', modelRecord);
+        console.log('Données du modèle:', modelData);
+
+        let modelRecord;
+        if (state.modelId) {
+            // Essayer de mettre à jour le modèle existant
+            console.log('Mise à jour du modèle existant:', state.modelId);
+            try {
+                modelRecord = await pb.collection('modele').update(state.modelId, modelData);
+                console.log('Modèle mis à jour avec succès:', modelRecord);
+            } catch (updateError: any) {
+                // Si le modèle n'existe pas (404), créer un nouveau
+                if (updateError?.status === 404) {
+                    console.warn('Le modèle n\'existe plus, création d\'un nouveau modèle');
+                    state.modelId = undefined;
+                    saveConfigurator(state);
+                    modelRecord = await pb.collection('modele').create(modelData);
+                    console.log('Nouveau modèle créé avec succès:', modelRecord);
+                    // Ajouter le modelId à l'état
+                    state.modelId = modelRecord.id;
+                    saveConfigurator(state);
+                } else {
+                    throw updateError;
+                }
+            }
+        } else {
+            // Créer un nouveau modèle
+            console.log('Création d\'un nouveau modèle');
+            modelRecord = await pb.collection('modele').create(modelData);
+            console.log('Modèle créé avec succès:', modelRecord);
+            // Ajouter le modelId à l'état
+            state.modelId = modelRecord.id;
+            saveConfigurator(state);
+        }
 
         // Dispatch event pour informer l'UI
         window.dispatchEvent(new CustomEvent('configurator-saved', {

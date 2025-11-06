@@ -1,0 +1,111 @@
+---
+// Composant modal pour saisir le nom de la sauvegarde
+---
+
+<dialog id="save-name-modal" class="modal">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">Nommer votre création</h3>
+        <p class="py-2 text-base-content/70">
+            Donnez un nom à votre création pour la retrouver facilement.
+        </p>
+
+        <div class="form-control w-full mt-4 mb-6">
+            <input
+                id="save-name-input"
+                type="text"
+                placeholder="Ex: Lunettes Été 2025"
+                class="input input-bordered w-full"
+                autofocus
+            />
+        </div>
+
+        <div class="modal-action">
+            <form method="dialog">
+                <button class="btn btn-ghost" type="submit"> Annuler </button>
+            </form>
+            <button
+                id="save-name-confirm"
+                class="btn btn-primary"
+                type="button"
+            >
+                Sauvegarder
+            </button>
+        </div>
+    </div>
+</dialog>
+
+<script>
+    export function showSaveNameModal(
+        defaultName: string = "",
+    ): Promise<string | null> {
+        return new Promise((resolve) => {
+            const modal = document.getElementById(
+                "save-name-modal",
+            ) as HTMLDialogElement;
+            const input = document.getElementById(
+                "save-name-input",
+            ) as HTMLInputElement;
+            const confirmBtn = document.getElementById(
+                "save-name-confirm",
+            ) as HTMLButtonElement;
+
+            if (!modal || !input) {
+                console.error("Modal or input not found");
+                resolve(null);
+                return;
+            }
+
+            // Définir la valeur par défaut
+            input.value = defaultName;
+
+            // Nettoyer les anciens event listeners
+            const newConfirmBtn = confirmBtn?.cloneNode(
+                true,
+            ) as HTMLButtonElement;
+            if (confirmBtn?.parentNode) {
+                confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+            }
+
+            // Bouton Sauvegarder
+            newConfirmBtn?.addEventListener("click", () => {
+                const value = input.value.trim();
+                if (value) {
+                    modal.close();
+                    resolve(value);
+                } else {
+                    input.classList.add("input-error");
+                }
+            });
+
+            // Touche Entrée pour valider
+            input.addEventListener("keypress", (e) => {
+                if (e.key === "Enter") {
+                    newConfirmBtn?.click();
+                }
+            });
+
+            // Touche Échap pour annuler
+            input.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") {
+                    modal.close();
+                    resolve(null);
+                }
+            });
+
+            // Fermeture du modal
+            modal.addEventListener(
+                "close",
+                () => {
+                    resolve(null);
+                },
+                { once: true },
+            );
+
+            console.log("Affichage du modal de nom...");
+            modal.showModal();
+        });
+    }
+
+    // Exposer la fonction globalement
+    (window as any).showSaveNameModal = showSaveNameModal;
+</script>

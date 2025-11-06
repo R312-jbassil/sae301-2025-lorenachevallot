@@ -234,6 +234,8 @@ const colorMap: Record<string, string> = {
 
         const STORAGE_KEY = "configurator_state";
         let configuratorState = {
+            modelId: modelData.modelId,
+            loadedAt: Date.now(), // Ajouter le timestamp du chargement
             materiaux: {
                 montureType: "Acétate de cellulose",
                 branchesType: "Acétate de cellulose",
@@ -273,6 +275,10 @@ const colorMap: Record<string, string> = {
             branches: modelData.branches,
             verres: modelData.verres,
         };
+
+        // Ajouter le modelId et le timestamp de chargement
+        configuratorState.modelId = modelData.modelId;
+        configuratorState.loadedAt = Date.now();
 
         console.log(
             "État du configurateur avant sauvegarde:",

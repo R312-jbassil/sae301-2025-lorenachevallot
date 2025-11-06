@@ -1,12 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
-import Card2 from "../components/Card2.astro";
+import supprimer from "../assets/supprimer.svg";
+import modifier from "../assets/modifier.svg";
+import dupliquer from "../assets/dupliquer.svg";
+import vue from "../assets/vue.svg";
+import DeleteConfirmModal from "../components/DeleteConfirmModal.astro";
 ---
 
 <Layout title="Mes Créations">
-   
     <main>
         <!-- Section Titre -->
         <div class="w-full bg-base-100 border-b border-base-300">
@@ -35,55 +36,745 @@ import Card2 from "../components/Card2.astro";
         <!-- Contenu principal -->
         <div class="w-full flex-1 bg-white">
             <div class="w-full mx-auto px-16 py-12">
-                <!-- Grille de cartes -->
+                <!-- Placeholder par défaut -->
                 <div
-                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+                    id="creations-placeholder"
+                    class="flex flex-col items-center justify-center py-16"
                 >
-                    <!-- Carte Création 1 -->
-                    <Card2
-                        title="TaVue - Personnalisation1"
-                        price={199}
-                        date="28 octobre 2025"
-                        monture="Acétate"
-                        branches="Salle"
-                        verres="Clair"
-                        modelId="creation1"
-                    />
+                    <svg
+                        class="w-16 h-16 text-gray-300 mb-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                        ></path>
+                    </svg>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">
+                        Aucune création
+                    </h3>
+                    <p class="text-gray-500 text-center max-w-md mb-6">
+                        Vous n'avez pas encore créé de lunettes personnalisées.
+                        Commencez par le configurateur !
+                    </p>
+                    <a
+                        href="/configurateur"
+                        class="px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors"
+                    >
+                        Créer ma première paire
+                    </a>
+                </div>
 
-                    <!-- Carte Création 2 -->
-                    <Card2
-                        title="TaVue - Paire pauline"
-                        price={199}
-                        date="28 octobre 2025"
-                        monture="Acétate"
-                        branches="Salle"
-                        verres="Clair"
-                        modelId="creation2"
-                    />
+                <!-- Conteneur pour les créations (vide au départ) -->
+                <div id="creations-list" style="display: none;">
+                    <!-- Caroussel -->
+                    <div class="relative space-y-8">
+                        <!-- Grille de cartes (4 par page) -->
+                        <div id="carousel-container" class="overflow-hidden">
+                            <div
+                                id="carousel-track"
+                                class="flex transition-transform duration-300 ease-in-out"
+                            >
+                                <!-- Cartes injectées ici -->
+                            </div>
+                        </div>
 
-                    <!-- Carte Création 3 -->
-                    <Card2
-                        title="TaVue - Personnalisation1"
-                        price={199}
-                        date="28 octobre 2025"
-                        monture="Acétate"
-                        branches="Salle"
-                        verres="Clair"
-                        modelId="creation3"
-                    />
+                        <!-- Boutons navigation -->
+                        <button
+                            id="carousel-prev"
+                            class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 p-2 bg-white border-2 border-gray-300 rounded-full hover:bg-gray-100 transition-all hidden"
+                            title="Précédent"
+                        >
+                            <svg
+                                class="w-6 h-6"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <button
+                            id="carousel-next"
+                            class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 p-2 bg-white border-2 border-gray-300 rounded-full hover:bg-gray-100 transition-all hidden"
+                            title="Suivant"
+                        >
+                            <svg
+                                class="w-6 h-6"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
 
-                    <!-- Carte Création 4 -->
-                    <Card2
-                        title="TaVue - Vert"
-                        price={199}
-                        date="28 octobre 2025"
-                        monture="Acétate"
-                        branches="Salle"
-                        verres="Clair"
-                        modelId="creation4"
-                    />
+                    <!-- Indicateurs de page -->
+                    <div
+                        class="flex justify-center gap-2"
+                        id="carousel-indicators"
+                    >
+                    </div>
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- Modal de confirmation de suppression -->
+    <DeleteConfirmModal />
+
+    <!-- Script pour initialiser le modal de suppression -->
+    <script is:inline>
+        function initDeleteModal() {
+            console.log("[DeleteModal Init] Initializing delete modal");
+
+            function showDeleteConfirmModal() {
+                return new Promise((resolve) => {
+                    const modal = document.getElementById(
+                        "delete-confirm-modal",
+                    );
+                    const cancelBtn = document.getElementById("delete-cancel");
+                    const confirmBtn =
+                        document.getElementById("delete-confirm");
+
+                    if (!modal) {
+                        console.error("[DeleteModal] Modal not found");
+                        resolve(false);
+                        return;
+                    }
+
+                    console.log(
+                        "[DeleteModal] Modal found, setting up listeners",
+                    );
+
+                    // Nettoyer les anciens event listeners
+                    const newCancelBtn = cancelBtn?.cloneNode(true);
+                    const newConfirmBtn = confirmBtn?.cloneNode(true);
+
+                    if (cancelBtn?.parentNode) {
+                        cancelBtn.parentNode.replaceChild(
+                            newCancelBtn,
+                            cancelBtn,
+                        );
+                    }
+                    if (confirmBtn?.parentNode) {
+                        confirmBtn.parentNode.replaceChild(
+                            newConfirmBtn,
+                            confirmBtn,
+                        );
+                    }
+
+                    // Ajouter les nouveaux event listeners
+                    newCancelBtn?.addEventListener("click", () => {
+                        console.log("[DeleteModal] Cancel clicked");
+                        modal.close();
+                        resolve(false);
+                    });
+
+                    newConfirmBtn?.addEventListener("click", () => {
+                        console.log("[DeleteModal] Confirm clicked");
+                        modal.close();
+                        resolve(true);
+                    });
+
+                    console.log("[DeleteModal] Showing modal");
+                    modal.showModal();
+                });
+            }
+
+            window.showDeleteConfirmModal = showDeleteConfirmModal;
+            console.log("[DeleteModal Init] Function exposed to window");
+        }
+
+        // Initialiser immédiatement
+        initDeleteModal();
+    </script>
 </Layout>
+
+<script>
+    console.log("[Creations] Script loaded");
+
+    async function initCreations() {
+        console.log("[Creations] Initializing...");
+
+        try {
+            // Récupérer userId depuis les cookies
+            function getCookie(name: string): string | null {
+                const nameEQ = name + "=";
+                const cookies = document.cookie.split(";");
+                for (let cookie of cookies) {
+                    cookie = cookie.trim();
+                    if (cookie.indexOf(nameEQ) === 0) {
+                        return decodeURIComponent(
+                            cookie.substring(nameEQ.length),
+                        );
+                    }
+                }
+                return null;
+            }
+
+            const userId = getCookie("pb_user_id");
+            console.log("[Creations] userId:", userId);
+
+            // Si pas connecté, afficher le placeholder
+            if (!userId) {
+                console.log("[Creations] Pas de userId - placeholder affiché");
+                return;
+            }
+
+            // Récupérer les créations depuis PocketBase (collection modele)
+            console.log("[Creations] Fetching from PocketBase...");
+            const response = await fetch(
+                `http://127.0.0.1:8090/api/collections/modele/records?filter=id_utilisateur="${userId}"&sort=-created&expand=id_materiau_monture,id_materiau_branche`,
+            );
+
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            const records = data.items || [];
+            console.log("[Creations] Records found:", records.length);
+
+            const placeholder = document.getElementById(
+                "creations-placeholder",
+            );
+            const container = document.getElementById("creations-list");
+
+            // Si aucune création, laisser le placeholder visible
+            if (records.length === 0) {
+                console.log(
+                    "[Creations] Aucune création - placeholder reste visible",
+                );
+                if (placeholder) placeholder.style.display = "";
+                if (container) container.style.display = "none";
+                return;
+            }
+
+            // Sinon, masquer placeholder et afficher le caroussel
+            console.log(
+                "[Creations] Affichage caroussel avec",
+                records.length,
+                "créations",
+            );
+            if (placeholder) placeholder.style.display = "none";
+            if (container) container.style.display = "block";
+
+            loadCarousel(records);
+        } catch (error) {
+            console.error("[Creations] Error:", error);
+            // En cas d'erreur, placeholder reste visible
+            const placeholder = document.getElementById(
+                "creations-placeholder",
+            );
+            if (placeholder) placeholder.style.display = "";
+        }
+    }
+
+    function loadCarousel(records: any[]): void {
+        console.log(
+            "[Carousel] Loading carousel with",
+            records.length,
+            "records",
+        );
+
+        const carouselTrack = document.getElementById("carousel-track");
+
+        if (!carouselTrack) {
+            console.error("[Carousel] carousel-track not found!");
+            return;
+        }
+
+        // Créer les cartes HTML avec les données de PocketBase (collection modele)
+        let html = "";
+        records.forEach((record: any, index: number): void => {
+            const recordId = record.id;
+            const svgContent = record.code_svg || "";
+            const titre = record.titre || "Sans titre";
+            const createdDate = new Date(record.created).toLocaleDateString(
+                "fr-FR",
+            );
+
+            // Encoder simplement l'ID du record pour la redirection
+            const encodedId = btoa(recordId);
+            html += `
+                <div class="w-1/4 flex-shrink-0 px-3" data-creation-id="${recordId}">
+                    <div class="bg-white rounded-2xl border-2 border-gray-400 p-6 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+                        <!-- SVG Lunette personnalisée -->
+                        <div class="mb-4 flex justify-center items-center bg-white rounded-xl p-2 h-48 overflow-visible flex-shrink-0">
+                            ${svgContent ? svgContent : '<div class="flex items-center justify-center text-gray-400 text-sm">Pas d\'image</div>'}
+                        </div>
+                        
+                        <!-- Informations -->
+                        <div class="flex-grow">
+                            <h3 class="font-semibold text-gray-800 mb-1 line-clamp-2">${titre}</h3>
+                            <p class="text-xs text-gray-500 mb-4">${createdDate}</p>
+                        </div>
+                        
+                        <!-- Boutons d'action -->
+                        <div class="flex gap-4 justify-center">
+                            <button 
+                                class="p-3 bg-white rounded-full transition-all duration-200 hover:shadow-md"
+                                onclick="viewCreationData('${encodedId}')"
+                                title="Voir"
+                            >
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5C7 5 2.73 8.11 1 12.46C2.73 16.89 7 20 12 20C17 20 21.27 16.89 23 12.46C21.27 8.11 17 5 12 5ZM12 17.5C9.24 17.5 7 15.26 7 12.5C7 9.74 9.24 7.5 12 7.5C14.76 7.5 17 9.74 17 12.5C17 15.26 14.76 17.5 12 17.5ZM12 9C10.34 9 9 10.34 9 12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12C15 10.34 13.66 9 12 9Z" fill="#000000"/></svg>
+                            </button>
+                            <button 
+                                class="p-3 bg-white rounded-full transition-all duration-200 hover:shadow-md"
+                                onclick="personalizeCreationData('${encodedId}')"
+                                title="Personnaliser ce modèle"
+                            >
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 17.25V21H6.75L17.81 9.94L14.06 6.19L3 17.25Z" fill="#000000"/><path d="M20.71 7.04C20.99 6.76 21.17 6.39 21.17 5.99C21.17 5.59 21.01 5.22 20.71 4.91L19.09 3.29C18.78 2.99 18.41 2.83 18.01 2.83C17.6 2.83 17.23 2.99 16.92 3.29L15.54 4.67L19.29 8.42L20.71 7.04Z" fill="#000000"/></svg>
+                            </button>
+                            <button 
+                                class="p-3 bg-white rounded-full transition-all duration-200 hover:shadow-md"
+                                onclick="duplicateCreation('${recordId}')"
+                                title="Dupliquer"
+                            >
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="#000000"/></svg>
+                            </button>
+                            <button 
+                                class="p-3 bg-white rounded-full transition-all duration-200 hover:shadow-md"
+                                onclick="deleteCreation('${recordId}')"
+                                title="Supprimer"
+                            >
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM19 4H15.5L14.5 3H9.5L8.5 4H5V6H19V4Z" fill="#000000"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        carouselTrack.innerHTML = html;
+        console.log(
+            "[Carousel] HTML injected with SVG content from modele collection",
+        );
+
+        // Initialiser le caroussel
+        initCarousel(records.length);
+    }
+
+    // Fonctions d'action pour les boutons
+    (window as any).viewCreationData = ((encodedId: string) => {
+        try {
+            const recordId = atob(encodedId);
+            console.log("[Action] Viewing creation:", recordId);
+            viewCreation(recordId);
+        } catch (e) {
+            console.error("[Action] Error decoding data:", e);
+            alert("Erreur lors du chargement des données");
+        }
+    }) as any;
+
+    (window as any).personalizeCreationData = ((encodedId: string) => {
+        try {
+            const recordId = atob(encodedId);
+            console.log("[Action] Personalizing creation:", recordId);
+            personalizeCreation(recordId);
+        } catch (e) {
+            console.error("[Action] Error decoding data:", e);
+            alert("Erreur lors du chargement des données");
+        }
+    }) as any;
+
+    function viewCreation(recordId: string): void {
+        console.log("[Action] Viewing creation from PocketBase:", recordId);
+
+        // Récupérer les données complètes du modèle depuis PocketBase
+        fetch(
+            `http://127.0.0.1:8090/api/collections/modele/records/${recordId}?expand=id_materiau_monture,id_materiau_branche`,
+        )
+            .then((res) => res.json())
+            .then((record) => {
+                console.log(
+                    "[Action] Données du modèle pour visualisation:",
+                    record,
+                );
+
+                const selectedModel = {
+                    modelId: recordId,
+                    title: record.titre,
+                    ...record,
+                };
+
+                localStorage.setItem(
+                    "selectedModel",
+                    JSON.stringify(selectedModel),
+                );
+                window.location.href = "/specifique";
+            })
+            .catch((error) => {
+                console.error(
+                    "[Action] Erreur lors de la récupération du modèle:",
+                    error,
+                );
+                alert("Erreur lors du chargement du modèle");
+            });
+    }
+
+    function personalizeCreation(modelData: string): void {
+        console.log("[Action] Personalizing creation:", modelData);
+
+        // Récupérer les données complètes du modèle depuis PocketBase
+        fetch(
+            `http://127.0.0.1:8090/api/collections/modele/records/${modelData}?expand=id_materiau_monture,id_materiau_branche`,
+        )
+            .then((res) => res.json())
+            .then((record) => {
+                console.log(
+                    "[Action] Données complètes du modèle depuis PocketBase:",
+                    record,
+                );
+
+                // Extraire les matériaux depuis les relations étendues
+                const montureId = record.id_materiau_monture || "";
+                const montureType =
+                    record.expand?.id_materiau_monture?.[0]?.libelle ||
+                    "Acétate de cellulose";
+                const branchesId = record.id_materiau_branche || "";
+                const branchesType =
+                    record.expand?.id_materiau_branche?.[0]?.libelle ||
+                    "Acétate de cellulose";
+
+                // Map pour convertir hex en nom de couleur
+                const hexToColorMap: Record<string, string> = {
+                    "#000000": "Noir",
+                    "#D4AF37": "Or",
+                    "#1E3A8A": "Bleu foncé",
+                    "#3B82F6": "Bleu clair",
+                    "#EF4444": "Rouge",
+                    "#22C55E": "Vert",
+                    "#6366F1": "Violet",
+                    "#F9A8D4": "Rose",
+                    "#F3F4F6": "Gris",
+                    "#CAC9F3": "Transparent",
+                };
+
+                // Convertir teinte_hex en nom de couleur
+                const teintColorName = record.teinte_hex
+                    ? hexToColorMap[record.teinte_hex.toUpperCase()] ||
+                      "Transparent"
+                    : "Transparent";
+
+                // Créer l'état complet du configurateur avec TOUS les paramètres du modèle
+                const configuratorState = {
+                    modelId: record.id,
+                    loadedAt: Date.now(), // Ajouter le timestamp du chargement
+                    materiaux: {
+                        montureId: montureId,
+                        montureType: montureType,
+                        branchesId: branchesId,
+                        branchesType: branchesType,
+                    },
+                    couleurs: {
+                        monture: record.couleur_monture || "Noir",
+                        branches: record.couleur_branches || "Noir",
+                        verres: teintColorName,
+                    },
+                    tailles: {
+                        largeurVerres: record.largeur_verres || 48,
+                        hauteurVerres: record.hauteur_verres || 20,
+                        largeurPont: record.largeur_pont || 42,
+                    },
+                    finitions: {
+                        type: record.finition || "Mat",
+                    },
+                    options: {
+                        emboutPersonnalises:
+                            record.embout_personnalises || false,
+                        charnieresFlexibles:
+                            record.charnieres_flexibles || false,
+                        gravurePersonnalisee:
+                            record.gravure_personnalisee || false,
+                    },
+                };
+
+                console.log(
+                    "État du configurateur à sauvegarder:",
+                    configuratorState,
+                );
+
+                try {
+                    // Sauvegarder dans localStorage
+                    localStorage.setItem(
+                        "configurator_state",
+                        JSON.stringify(configuratorState),
+                    );
+                    console.log(
+                        "Paramètres du modèle sauvegardés dans localStorage",
+                    );
+
+                    // Dispatcher l'événement pour les mises à jour réactives
+                    window.dispatchEvent(
+                        new CustomEvent("configurator-changed", {
+                            detail: configuratorState,
+                        }),
+                    );
+
+                    // Rediriger vers le configurateur après un court délai
+                    setTimeout(() => {
+                        window.location.href = "/configurateur";
+                    }, 100);
+                } catch (e) {
+                    console.error(
+                        "Erreur lors de la sauvegarde du configurateur:",
+                        e,
+                    );
+                    alert("Erreur lors du chargement du configurateur");
+                }
+            })
+            .catch((error) => {
+                console.error(
+                    "[Action] Erreur lors de la récupération du modèle:",
+                    error,
+                );
+                alert("Erreur lors du chargement du modèle");
+            });
+    }
+
+    window.duplicateCreation = function (recordId) {
+        console.log("[Action] Duplicating creation:", recordId);
+        // Charger la création et créer une copie
+        fetch(
+            `http://127.0.0.1:8090/api/collections/modele/records/${recordId}`,
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(
+                    "[Action] Creation data loaded for duplication:",
+                    data,
+                );
+
+                // Préparer les données pour la nouvelle création
+                const newData = {
+                    titre: data.titre + " (copie)",
+                    code_svg: data.code_svg,
+                    id_utilisateur: data.id_utilisateur,
+                };
+
+                // Créer la nouvelle création en base de données
+                return fetch(
+                    "http://127.0.0.1:8090/api/collections/modele/records",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(newData),
+                    },
+                );
+            })
+            .then((res) => {
+                if (res.ok) {
+                    console.log("[Action] Creation duplicated successfully");
+                    // Recharger la page pour voir la nouvelle duplication
+                    location.reload();
+                } else {
+                    alert("Erreur lors de la duplication");
+                }
+            })
+            .catch((err) => {
+                console.error("[Action] Error duplicating creation:", err);
+                alert("Erreur lors de la duplication");
+            });
+    };
+
+    window.deleteCreation = function (recordId) {
+        console.log("[Action] Deleting creation:", recordId);
+
+        // Afficher le modal de confirmation
+        (async () => {
+            const confirmed = await (window as any).showDeleteConfirmModal?.();
+
+            if (confirmed) {
+                try {
+                    fetch(
+                        `http://127.0.0.1:8090/api/collections/modele/records/${recordId}`,
+                        {
+                            method: "DELETE",
+                        },
+                    )
+                        .then((response) => {
+                            if (response.ok) {
+                                console.log(
+                                    "[Action] Creation deleted successfully",
+                                );
+
+                                // Retirer la card du DOM sans recharger
+                                const card = document.querySelector(
+                                    `[data-creation-id="${recordId}"]`,
+                                );
+                                if (card) {
+                                    card.remove();
+                                    console.log(
+                                        "[Action] Card removed from DOM",
+                                    );
+
+                                    // Vérifier s'il reste des créations
+                                    const remaining =
+                                        document.querySelectorAll(
+                                            "[data-creation-id]",
+                                        );
+                                    if (remaining.length === 0) {
+                                        console.log(
+                                            "[Action] No more creations, showing placeholder",
+                                        );
+                                        const placeholder =
+                                            document.getElementById(
+                                                "creations-placeholder",
+                                            );
+                                        const container =
+                                            document.getElementById(
+                                                "creations-list",
+                                            );
+                                        if (placeholder && container) {
+                                            placeholder.style.display = "";
+                                            container.style.display = "none";
+                                        }
+                                    }
+                                }
+                            } else {
+                                alert("Erreur lors de la suppression");
+                            }
+                        })
+                        .catch((error) => {
+                            console.error(
+                                "[Action] Error deleting creation:",
+                                error,
+                            );
+                            alert("Erreur lors de la suppression");
+                        });
+                } catch (error) {
+                    console.error("[Action] Error:", error);
+                }
+            }
+        })();
+    };
+
+    function initCarousel(totalRecords: number): void {
+        console.log("[Carousel] Initializing with", totalRecords, "records");
+
+        const carouselTrack = document.getElementById("carousel-track");
+        const prevButton = document.getElementById("carousel-prev");
+        const nextButton = document.getElementById("carousel-next");
+        const indicatorsContainer = document.getElementById(
+            "carousel-indicators",
+        );
+
+        if (!carouselTrack) {
+            console.error("[Carousel] Missing elements!");
+            return;
+        }
+
+        const itemsPerPage = 4;
+        const totalPages = Math.ceil(totalRecords / itemsPerPage);
+        let currentPage = 0;
+
+        console.log("[Carousel] Total pages:", totalPages);
+
+        // Créer les indicateurs
+        let indicatorsHTML = "";
+        for (let i = 0; i < totalPages; i++) {
+            indicatorsHTML += `
+                <button 
+                    data-page="${i}"
+                    class="w-3 h-3 rounded-full transition-all ${i === 0 ? "bg-primary w-8" : "bg-gray-300"}"
+                ></button>
+            `;
+        }
+        if (indicatorsContainer) {
+            indicatorsContainer.innerHTML = indicatorsHTML;
+        }
+
+        // Afficher/masquer les boutons
+        if (totalPages > 1) {
+            if (prevButton) prevButton.classList.remove("hidden");
+            if (nextButton) nextButton.classList.remove("hidden");
+        } else {
+            if (prevButton) prevButton.classList.add("hidden");
+            if (nextButton) nextButton.classList.add("hidden");
+        }
+
+        function updateCarousel(): void {
+            const translateX = -currentPage * 100;
+            if (carouselTrack) {
+                carouselTrack.style.transform = `translateX(${translateX}%)`;
+            }
+
+            // Mettre à jour indicateurs
+            const indicators = document.querySelectorAll(
+                "#carousel-indicators button",
+            );
+            indicators.forEach((indicator: Element, index: number) => {
+                if (index === currentPage) {
+                    indicator.classList.add("bg-primary", "w-8");
+                    indicator.classList.remove("bg-gray-300");
+                } else {
+                    indicator.classList.remove("bg-primary", "w-8");
+                    indicator.classList.add("bg-gray-300");
+                }
+            });
+        }
+
+        if (prevButton) {
+            prevButton.addEventListener("click", () => {
+                currentPage = (currentPage - 1 + totalPages) % totalPages;
+                updateCarousel();
+            });
+        }
+
+        if (nextButton) {
+            nextButton.addEventListener("click", () => {
+                currentPage = (currentPage + 1) % totalPages;
+                updateCarousel();
+            });
+        }
+
+        // Clic sur indicateurs
+        document
+            .querySelectorAll("#carousel-indicators button")
+            .forEach((btn) => {
+                btn.addEventListener("click", (e: Event) => {
+                    const target = e.target as HTMLButtonElement;
+                    if (target && target.hasAttribute("data-page")) {
+                        const page = target.getAttribute("data-page");
+                        if (page !== null) {
+                            currentPage = parseInt(page);
+                            updateCarousel();
+                        }
+                    }
+                });
+            });
+
+        updateCarousel();
+        console.log("[Carousel] Initialized successfully");
+    }
+
+    // Démarrer au chargement
+    if (typeof window !== "undefined") {
+        if (document.readyState === "loading") {
+            console.log("[Creations] Waiting for DOMContentLoaded");
+            document.addEventListener("DOMContentLoaded", initCreations);
+        } else {
+            console.log(
+                "[Creations] Document already loaded, running immediately",
+            );
+            initCreations();
+        }
+    }
+</script>

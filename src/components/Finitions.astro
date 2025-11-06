@@ -92,6 +92,39 @@ const { onFinitionChange } = Astro.props;
                 'input[name="finition"]',
             );
 
+            // Initialiser depuis le localStorage
+            function initializeFromStorage() {
+                try {
+                    const stored = localStorage.getItem("configurator_state");
+                    if (stored) {
+                        const state = JSON.parse(stored);
+                        if (state.finitions && state.finitions.type) {
+                            console.log(
+                                "[Finitions] Initialisation depuis localStorage:",
+                                state.finitions.type,
+                            );
+
+                            const selectedRadio = document.querySelector(
+                                `input[name="finition"][value="${state.finitions.type}"]`,
+                            ) as HTMLInputElement;
+
+                            if (selectedRadio) {
+                                selectedRadio.checked = true;
+                                console.log(
+                                    "[Finitions] Finition sélectionnée:",
+                                    state.finitions.type,
+                                );
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.error(
+                        "[Finitions] Erreur lors de la lecture du localStorage:",
+                        e,
+                    );
+                }
+            }
+
             function emitChanges() {
                 const selectedRadio = document.querySelector(
                     'input[name="finition"]:checked',
@@ -105,6 +138,11 @@ const { onFinitionChange } = Astro.props;
             finitionRadios.forEach((radio) => {
                 radio.addEventListener("change", emitChanges);
             });
+
+            // Initialiser avec un délai
+            setTimeout(() => {
+                initializeFromStorage();
+            }, 50);
         </script>
     </div>
 </div>

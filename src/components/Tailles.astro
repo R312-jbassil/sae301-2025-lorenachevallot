@@ -166,6 +166,36 @@ const { onSizeChange } = Astro.props;
                 "largeurPont",
             ) as HTMLInputElement;
 
+            // Initialiser depuis le localStorage
+            function initializeFromStorage() {
+                try {
+                    const stored = localStorage.getItem("configurator_state");
+                    if (stored) {
+                        const state = JSON.parse(stored);
+                        if (state.tailles) {
+                            console.log("[Tailles] Initialisation depuis localStorage:", state.tailles);
+                            
+                            if (state.tailles.largeurVerres && largeurVerresInput) {
+                                largeurVerresInput.value = state.tailles.largeurVerres.toString();
+                                updateValue(largeurVerresInput);
+                            }
+                            
+                            if (state.tailles.hauteurVerres && hauteurVerresInput) {
+                                hauteurVerresInput.value = state.tailles.hauteurVerres.toString();
+                                updateValue(hauteurVerresInput);
+                            }
+                            
+                            if (state.tailles.largeurPont && largeurPontInput) {
+                                largeurPontInput.value = state.tailles.largeurPont.toString();
+                                updateValue(largeurPontInput);
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.error("[Tailles] Erreur lors de la lecture du localStorage:", e);
+                }
+            }
+
             function emitChanges() {
                 updateTailles({
                     largeurVerres: parseInt(largeurVerresInput?.value || "48"),
@@ -205,6 +235,11 @@ const { onSizeChange } = Astro.props;
                     updateValue(this);
                 });
             }
+
+            // Initialiser avec un délai pour attendre le chargement du DOM
+            setTimeout(() => {
+                initializeFromStorage();
+            }, 50);
         </script>
     </div>
 </div>

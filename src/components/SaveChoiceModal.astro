@@ -1,0 +1,152 @@
+---
+// Composant modal pour choisir entre modifier ou créer un nouveau modèle
+---
+
+<dialog id="save-choice-modal" class="modal">
+    <div class="modal-box max-w-md">
+        <h3 class="font-bold text-2xl mb-6">Vous possédez déjà des paires</h3>
+
+        <div class="space-y-6">
+            <p class="text-base-content/70 text-base leading-relaxed">
+                Vous possédez déjà
+                <span id="models-count" class="font-semibold text-primary"
+                    >0</span
+                >
+                paire(s) de lunettes sauvegardée(s). Voulez-vous en modifier une
+                ou en créer une nouvelle ?
+            </p>
+
+            <div
+                class="form-control w-full"
+                id="models-select-container"
+                style="display: none;"
+            >
+                <label class="label pb-2">
+                    <span class="label-text font-semibold"
+                        >Sélectionnez la paire à modifier</span
+                    >
+                </label>
+                <select
+                    id="models-select"
+                    class="select select-bordered w-full focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                    <option disabled selected>Choisir une paire...</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="modal-action mt-8 flex gap-3 justify-end">
+            <button
+                id="choice-create-new"
+                class="btn btn-secondary flex-1"
+                type="button"
+            >
+                Créer une nouvelle paire
+            </button>
+            <button
+                id="choice-update"
+                class="btn btn-primary flex-1"
+                type="button"
+            >
+                Modifier cette paire
+            </button>
+        </div>
+    </div>
+</dialog>
+
+<script>
+    export function showSaveChoiceModal(
+        userModels: any[],
+    ): Promise<{ action: string; modelId?: string } | null> {
+        return new Promise((resolve) => {
+            const modal = document.getElementById(
+                "save-choice-modal",
+            ) as HTMLDialogElement;
+            const updateBtn = document.getElementById(
+                "choice-update",
+            ) as HTMLButtonElement;
+            const createNewBtn = document.getElementById(
+                "choice-create-new",
+            ) as HTMLButtonElement;
+            const modelsCount = document.getElementById(
+                "models-count",
+            ) as HTMLElement;
+            const modelsSelect = document.getElementById(
+                "models-select",
+            ) as HTMLSelectElement;
+            const modelsSelectContainer = document.getElementById(
+                "models-select-container",
+            ) as HTMLElement;
+
+            if (!modal) {
+                console.error("Modal not found");
+                resolve(null);
+                return;
+            }
+
+            // Mettre à jour le nombre de paires
+            if (modelsCount) {
+                modelsCount.textContent = userModels.length.toString();
+            }
+
+            // Remplir le sélecteur avec les modèles
+            if (modelsSelect && modelsSelectContainer) {
+                // Vider les options existantes
+                modelsSelect.innerHTML =
+                    "<option disabled selected>Choisir une paire...</option>";
+
+                // Ajouter les modèles
+                userModels.forEach((model: any) => {
+                    const option = document.createElement("option");
+                    option.value = model.id;
+                    option.textContent = model.titre;
+                    modelsSelect.appendChild(option);
+                });
+
+                // Afficher le conteneur
+                modelsSelectContainer.style.display = "block";
+
+                // Sélectionner le premier modèle par défaut
+                if (userModels.length > 0) {
+                    modelsSelect.value = userModels[0].id;
+                }
+            }
+
+            // Nettoyer les anciens event listeners
+            const newUpdateBtn = updateBtn?.cloneNode(
+                true,
+            ) as HTMLButtonElement;
+            const newCreateNewBtn = createNewBtn?.cloneNode(
+                true,
+            ) as HTMLButtonElement;
+
+            if (updateBtn?.parentNode) {
+                updateBtn.parentNode.replaceChild(newUpdateBtn, updateBtn);
+            }
+            if (createNewBtn?.parentNode) {
+                createNewBtn.parentNode.replaceChild(
+                    newCreateNewBtn,
+                    createNewBtn,
+                );
+            }
+
+            newUpdateBtn?.addEventListener("click", () => {
+                const selectedModelId =
+                    modelsSelect?.value || userModels[0]?.id || null;
+                modal.close();
+                resolve({ action: "update", modelId: selectedModelId });
+            });
+
+            newCreateNewBtn?.addEventListener("click", () => {
+                modal.close();
+                resolve({ action: "create" });
+            });
+
+            console.log("Affichage du modal de choix...");
+            modal.showModal();
+        });
+    }
+
+    // Exposer la fonction globalement
+    (window as any).showSaveChoiceModal = showSaveChoiceModal;
+</script>

@@ -98,6 +98,42 @@ const { onOptionsChange } = Astro.props;
                 "gravurePersonnalisee",
             ) as HTMLInputElement;
 
+            // Initialiser depuis le localStorage
+            function initializeFromStorage() {
+                try {
+                    const stored = localStorage.getItem("configurator_state");
+                    if (stored) {
+                        const state = JSON.parse(stored);
+                        if (state.options) {
+                            console.log(
+                                "[Options] Initialisation depuis localStorage:",
+                                state.options,
+                            );
+
+                            if (emboutPersonnalisesInput) {
+                                emboutPersonnalisesInput.checked =
+                                    state.options.emboutPersonnalises || false;
+                            }
+
+                            if (charnieresFlexiblesInput) {
+                                charnieresFlexiblesInput.checked =
+                                    state.options.charnieresFlexibles || false;
+                            }
+
+                            if (gravurePersonnaliseeInput) {
+                                gravurePersonnaliseeInput.checked =
+                                    state.options.gravurePersonnalisee || false;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.error(
+                        "[Options] Erreur lors de la lecture du localStorage:",
+                        e,
+                    );
+                }
+            }
+
             function emitChanges() {
                 updateOptions({
                     emboutPersonnalises:
@@ -127,6 +163,11 @@ const { onOptionsChange } = Astro.props;
                     emitChanges,
                 );
             }
+
+            // Initialiser avec un délai
+            setTimeout(() => {
+                initializeFromStorage();
+            }, 50);
         </script>
     </div>
 </div>

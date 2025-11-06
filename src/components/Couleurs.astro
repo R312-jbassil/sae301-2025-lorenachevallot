@@ -493,9 +493,11 @@ const colorPalette = [
 
             // Appeler au chargement du DOM
             if (document.readyState === "loading") {
-                document.addEventListener("DOMContentLoaded", initializeColors);
+                document.addEventListener("DOMContentLoaded", () => {
+                    setTimeout(initializeColors, 50);
+                });
             } else {
-                initializeColors();
+                setTimeout(initializeColors, 50);
             }
 
             // Aussi écouter les changements du localStorage

@@ -1,0 +1,32 @@
+---
+// Composant modal pour confirmer la suppression d'une création
+// La fonction showDeleteConfirmModal() est exposée depuis Creations.astro via le script is:inline
+---
+
+<dialog id="delete-confirm-modal" class="modal">
+    <div class="modal-box max-w-md">
+        <h3 class="font-bold text-xl mb-4">Confirmer la suppression</h3>
+
+        <p class="text-base-content/70 text-base leading-relaxed mb-6">
+            Êtes-vous sûr de vouloir supprimer cette création ? Cette action est
+            <span class="font-semibold">irréversible</span>.
+        </p>
+
+        <div class="modal-action mt-8 flex gap-3 justify-end">
+            <button
+                id="delete-cancel"
+                class="btn btn-outline flex-1"
+                type="button"
+            >
+                Annuler
+            </button>
+            <button
+                id="delete-confirm"
+                class="btn btn-error flex-1"
+                type="button"
+            >
+                Supprimer
+            </button>
+        </div>
+    </div>
+</dialog>
