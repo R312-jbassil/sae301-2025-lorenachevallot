@@ -1,0 +1,253 @@
+---
+interface Props {
+    title: string;
+    price: number;
+    date: string;
+    monture: string;
+    branches: string;
+    verres: string;
+    modelId?: string;
+}
+
+const {
+    title,
+    price,
+    date,
+    monture,
+    branches,
+    verres,
+    modelId = "default",
+} = Astro.props;
+
+// Map des couleurs nommées aux codes hex
+const colorMap: Record<string, string> = {
+    Noir: "#000000",
+    Or: "#D4AF37",
+    Bleu: "#1E3A8A",
+    "Bleu foncé": "#1E3A8A",
+    "Bleu clair": "#3B82F6",
+    Rouge: "#EF4444",
+    Vert: "#22C55E",
+    Violet: "#6366F1",
+    Rose: "#F9A8D4",
+    Gris: "#F3F4F6",
+    Transparent: "rgba(202, 201, 243, 0.4)",
+};
+---
+
+<div
+    class="bg-white rounded-lg border border-gray-300 p-4 shadow-sm hover:shadow-md transition-shadow"
+>
+    <!-- SVG Lunette avec couleurs personnalisées -->
+    <div class="mb-4 flex justify-center bg-gray-50 rounded-lg p-3">
+        <svg
+            width="250"
+            height="110"
+            viewBox="0 0 564 217"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            id="lunettes-svg-card2"
+        >
+            <g clip-path="url(#clip0_2066_1290)">
+                <path
+                    id="branche-gauche-card2"
+                    class="svg-branche"
+                    d="M8.11946 60.0087C8.11946 60.0087 76.8439 52.2607 84.6146 47.8234C92.3852 43.386 100.128 36.7508 111.77 34.5391C123.412 32.3273 201.564 19.043 201.564 19.043C201.564 19.043 211.535 16.2749 225.949 26.791C240.362 37.3072 271.96 71.0813 280.817 69.9824C289.688 68.8696 294.116 56.6981 291.345 51.1618C288.574 45.6255 234.708 5.60573 225.392 2.9906C212.12 -0.737352 194.908 -0.333954 173.838 2.9906C152.782 6.31515 11.9909 35.4571 11.9909 35.4571C11.9909 35.4571 -6.29388 43.9702 8.10553 60.0226L8.11946 60.0087Z"
+                    fill={colorMap[branches] || branches}
+                    stroke="#1D1D1B"
+                    stroke-width="0.5"
+                    stroke-miterlimit="10"></path>
+                <g style="mix-blend-mode:multiply">
+                    <path
+                        d="M285.816 53.9159C285.816 53.9159 285.384 62.4708 280.274 61.664C273.352 60.579 230.391 14.6056 215.978 16.8173C215.978 16.8173 227.856 20.587 241.685 33.0088C250.751 41.1602 289.618 85.6591 285.816 53.9159Z"
+                        fill="#706F6F"></path>
+                </g>
+                <path
+                    id="branche-droite-card2"
+                    class="svg-branche"
+                    d="M378.493 94.1027L504.579 52.678C504.579 52.678 535.397 44.8465 539.881 47.0861C544.365 49.3256 564.544 89.6236 564.544 94.1027C564.544 98.5818 561.174 113.591 556.703 114.815C553.459 115.705 549.281 114.968 547.178 108.959C545.215 103.367 537.653 64.8216 529.812 65.1833C521.972 65.545 459.208 87.3702 459.208 87.3702C459.208 87.3702 440.714 96.3284 432.874 103.047C425.034 109.766 388.047 118.724 388.047 118.724C388.047 118.724 374.594 108.083 378.521 94.0888L378.493 94.1027Z"
+                    fill={colorMap[branches] || branches}
+                    stroke="#1D1D1B"
+                    stroke-width="0.5"
+                    stroke-miterlimit="10"></path>
+                <g style="mix-blend-mode:multiply">
+                    <path
+                        d="M387.615 94.7287C387.615 94.7287 530.036 45.7785 537.806 50.2298C537.806 50.2298 512.461 53.6934 479.652 66.7552C446.842 79.8169 387.615 97.3995 387.615 97.3995V94.7287Z"
+                        fill="#706F6F"></path>
+                </g>
+                <g style="mix-blend-mode:multiply">
+                    <path
+                        d="M532.473 64.0705C532.473 64.0705 537.013 64.0705 539.408 68.8696C541.803 73.6686 553.013 103.242 553.013 103.242C553.013 103.242 554.086 110.169 560.213 99.5139C560.213 99.5139 555.938 112.812 552.749 108.959C549.56 105.106 539.143 72.3332 539.143 72.3332C539.143 72.3332 535.146 62.9577 532.473 64.0705Z"
+                        fill="#706F6F"></path>
+                </g>
+                <path
+                    id="verre-droit-card2"
+                    class="svg-verre"
+                    d="M270.347 207.905C229.147 206.305 201.847 140.239 193.347 107.405C206.147 89.4054 228.013 83.2387 237.347 82.4054C277.013 79.9054 357.247 84.9054 360.847 124.905C364.447 164.905 346.347 194.905 336.847 204.905C331.847 206.572 311.547 209.505 270.347 207.905Z"
+                    fill={colorMap[verres] || verres}
+                    fill-opacity="0.4"
+                    stroke="black"></path>
+                <path
+                    id="verre-gauche-card2"
+                    class="svg-verre"
+                    d="M58.8465 166.405C19.2465 149.605 18.3465 84.0716 22.8465 53.405C26.5133 48.5716 43.6467 41.805 82.8467 53.405C131.847 67.905 145.347 85.405 149.347 107.405C152.547 125.005 134.347 154.072 124.847 166.405C119.347 173.405 98.4465 183.205 58.8465 166.405Z"
+                    fill={colorMap[verres] || verres}
+                    fill-opacity="0.4"
+                    stroke="black"></path>
+                <path
+                    id="monture-card2"
+                    class="svg-monture"
+                    d="M393.143 95.7163C392.809 90.9729 379.816 88.4551 375.443 86.8137C371.07 85.1723 353.579 89.5401 353.579 89.5401C336.632 85.1723 277.614 76.9791 243.732 76.9791C209.85 76.9791 198.375 92.809 194.545 92.2665C190.716 91.724 170.495 91.1815 161.75 89.5401C153.004 87.8987 154.648 69.8849 107.091 52.7057C59.5475 35.5266 11.9904 35.4292 11.9904 35.4292C-6.60067 41.9114 2.57651 61.1493 2.57651 61.1493L5.43133 69.9823C11.4473 72.8061 9.80407 84.6159 11.9904 102.087C14.1768 119.558 22.3792 141.94 31.6678 155.586C40.9564 169.232 75.9383 184.519 93.4292 185.062C110.92 185.604 126.225 182.335 137.7 163.765C149.175 145.209 161.207 112.45 161.207 112.45L175.411 114.634C175.411 114.634 179.464 115.065 182.862 118.932C186.259 122.8 189.031 130.102 193.445 143.011C203.973 173.753 228.427 197.609 228.427 197.609C228.427 197.609 236.226 207.944 274.995 215.219C307.137 221.256 334.459 211.797 334.459 211.797C359.136 201.824 364.581 149.257 364.581 149.257C364.581 149.257 367.129 130.756 375.457 126.096C385.72 120.337 386.974 119.92 393.157 118.696C398.184 117.708 393.491 100.432 393.157 95.6884L393.143 95.7163ZM121.852 165.977C108.734 173.071 77.0384 175.798 57.3611 160.524C37.6838 145.237 28.3952 118.487 25.6657 86.8276C22.9362 55.1679 35.5531 51.732 35.5531 51.732C35.5531 51.732 56.2749 50.8 83.0544 57.3379C109.834 63.8896 139.343 82.4459 139.9 94.4643C140.443 106.469 134.984 158.883 121.866 165.977H121.852ZM336.632 199.821C324.057 205.83 306.733 206.372 292.166 205.273C277.6 204.188 239.888 203.09 226.227 161.595C226.227 161.595 222.397 141.94 219.125 137.572C215.852 133.204 206.006 117.43 206.006 111.936C206.006 100.487 215.963 93.894 215.963 93.894C215.963 93.894 227.327 86.7998 242.075 86.7998C256.836 86.7998 332.245 90.6251 342.634 104.814C353.022 119.002 352.465 135.388 354.109 148.492C355.752 161.595 349.193 193.797 336.618 199.807L336.632 199.821Z"
+                    fill={colorMap[monture] || monture}
+                    stroke="#1D1D1B"
+                    stroke-width="0.5"
+                    stroke-miterlimit="10"></path>
+            </g>
+            <defs>
+                <clipPath id="clip0_2066_1290">
+                    <rect width="564" height="217" fill="white"></rect>
+                </clipPath>
+            </defs>
+        </svg>
+    </div>
+
+    <!-- Date et titre -->
+    <p class="text-xs text-gray-500 mb-1">{date}</p>
+    <h3 class="text-sm font-semibold text-black mb-2">
+        {title}
+    </h3>
+
+    <!-- Prix -->
+    <p class="text-sm font-bold text-black mb-2">
+        {price}€
+    </p>
+
+    <!-- Détails des couleurs -->
+    <div class="text-xs text-gray-600 mb-4 space-y-1">
+        <p>
+            <span class="font-semibold">Acétate</span>
+            <span class="text-gray-500">Salle</span>
+            <span class="text-gray-500">Clair</span>
+        </p>
+    </div>
+
+    <!-- Boutons d'actions -->
+    <div class="flex justify-center gap-3">
+        <!-- Voir -->
+        <button
+            class="p-2 hover:bg-gray-100 rounded-lg transition text-black"
+            title="Voir le modèle"
+            onclick={`viewCreation('${modelId}')`}
+        >
+            <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                ></path>
+            </svg>
+        </button>
+        <!-- Éditer -->
+        <button
+            class="p-2 hover:bg-gray-100 rounded-lg transition text-black"
+            title="Éditer le modèle"
+            onclick={`editCreation('${modelId}')`}
+        >
+            <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                ></path>
+            </svg>
+        </button>
+        <!-- Dupliquer -->
+        <button
+            class="p-2 hover:bg-gray-100 rounded-lg transition text-black"
+            title="Dupliquer le modèle"
+            onclick={`duplicateCreation('${modelId}')`}
+        >
+            <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                ></path>
+            </svg>
+        </button>
+        <!-- Supprimer -->
+        <button
+            class="p-2 hover:bg-red-100 rounded-lg transition text-red-600"
+            title="Supprimer le modèle"
+            onclick={`deleteCreation('${modelId}')`}
+        >
+            <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                ></path>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<script>
+    declare global {
+        interface Window {
+            viewCreation: (id: string) => void;
+            editCreation: (id: string) => void;
+            duplicateCreation: (id: string) => void;
+            deleteCreation: (id: string) => void;
+        }
+    }
+
+    window.viewCreation = function (id: string) {
+        console.log("Voir la création:", id);
+        // À implémenter selon vos besoins
+    };
+
+    window.editCreation = function (id: string) {
+        console.log("Éditer la création:", id);
+        // À implémenter selon vos besoins
+    };
+
+    window.duplicateCreation = function (id: string) {
+        console.log("Dupliquer la création:", id);
+        // À implémenter selon vos besoins
+    };
+
+    window.deleteCreation = function (id: string) {
+        console.log("Supprimer la création:", id);
+        // À implémenter selon vos besoins
+    };
+</script>

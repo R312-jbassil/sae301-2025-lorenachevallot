@@ -1,0 +1,89 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Card2 from "../components/Card2.astro";
+---
+
+<Layout title="Mes Créations">
+   
+    <main>
+        <!-- Section Titre -->
+        <div class="w-full bg-base-100 border-b border-base-300">
+            <div class="w-full mx-auto px-16 py-12">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-3xl font-normal mb-3">
+                            Mes <span class="text-primary">créations</span>
+                        </h1>
+                        <p class="text-base-content/70 text-base">
+                            Retrouvez toutes vos configurations personnalisées
+                        </p>
+                    </div>
+                    <div>
+                        <select class="select select-bordered w-48">
+                            <option>Trier par date</option>
+                            <option>Plus récent</option>
+                            <option>Plus ancien</option>
+                            <option>Alphabétique</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="w-full flex-1 bg-white">
+            <div class="w-full mx-auto px-16 py-12">
+                <!-- Grille de cartes -->
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+                >
+                    <!-- Carte Création 1 -->
+                    <Card2
+                        title="TaVue - Personnalisation1"
+                        price={199}
+                        date="28 octobre 2025"
+                        monture="Acétate"
+                        branches="Salle"
+                        verres="Clair"
+                        modelId="creation1"
+                    />
+
+                    <!-- Carte Création 2 -->
+                    <Card2
+                        title="TaVue - Paire pauline"
+                        price={199}
+                        date="28 octobre 2025"
+                        monture="Acétate"
+                        branches="Salle"
+                        verres="Clair"
+                        modelId="creation2"
+                    />
+
+                    <!-- Carte Création 3 -->
+                    <Card2
+                        title="TaVue - Personnalisation1"
+                        price={199}
+                        date="28 octobre 2025"
+                        monture="Acétate"
+                        branches="Salle"
+                        verres="Clair"
+                        modelId="creation3"
+                    />
+
+                    <!-- Carte Création 4 -->
+                    <Card2
+                        title="TaVue - Vert"
+                        price={199}
+                        date="28 octobre 2025"
+                        monture="Acétate"
+                        branches="Salle"
+                        verres="Clair"
+                        modelId="creation4"
+                    />
+                </div>
+            </div>
+        </div>
+    </main>
+</Layout>
