@@ -33,7 +33,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22028
         source: "dist/*"
-        target: "/var/www/<dossier_app>/"
+        target: "/var/www/sae-301/"
         strip_components: 1
         rm: false
         overwrite: true
