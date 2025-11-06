@@ -161,16 +161,17 @@ import Google from "../assets/google.svg";
     </main>
 </Layout>
 
+<script
+    src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.4/dist/pocketbase.umd.js"
+></script>
 <script type="module">
-    import PocketBase from "pocketbase";
-
-    // Déterminer l'URL de PocketBase en fonction de l'environnement
+    // URL de PocketBase
     const pbUrl =
-        import.meta.env.MODE === "production"
-            ? "https://sae-301.lorena-chevallot.fr:8084"
-            : "http://127.0.0.1:8090";
+        window.location.hostname === "localhost"
+            ? "http://127.0.0.1:8090"
+            : "https://sae-301.lorena-chevallot.fr:8084";
 
-    const pb = new PocketBase(pbUrl);
+    const pb = new window.PocketBase(pbUrl);
 
     // Fonction pour enregistrer les cookies
     function setCookie(name, value, days = 7) {

@@ -108,16 +108,17 @@ import Google from "../assets/google.svg";
     </main>
 </Layout>
 
+<script
+    src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.4/dist/pocketbase.umd.js"
+></script>
 <script type="module">
-    import PocketBase from "pocketbase";
-
-    // Déterminer l'URL de PocketBase en fonction de l'environnement
+    // URL de PocketBase
     const pbUrl =
-        import.meta.env.MODE === "production"
-            ? "https://sae-301.lorena-chevallot.fr:8084"
-            : "http://127.0.0.1:8090";
+        window.location.hostname === "localhost"
+            ? "http://127.0.0.1:8090"
+            : "https://sae-301.lorena-chevallot.fr:8084";
 
-    const pb = new PocketBase(pbUrl);
+    const pb = new window.PocketBase(pbUrl);
 
     // Fonction pour enregistrer les cookies
     function setCookie(name, value, days = 7) {
@@ -146,36 +147,25 @@ import Google from "../assets/google.svg";
         // Récupère l'URL du document référent
         const referrer = document.referrer;
 
-        // Vérifiez si l'utilisateur vient de la page de connexion ou d'inscription
+        // Si le referrer existe et ne vient pas de connexion/inscription, retourner le chemin
         if (
-            referrer.includes("/connexion") ||
-            referrer.includes("/inscription")
+            referrer &&
+            !referrer.includes("/connexion") &&
+            !referrer.includes("/inscription")
         ) {
-            return "/";
-        }
-
-        // Si le referrer est vide ou du même domaine, rediriger vers l'accueil
-        if (referrer === "" || !referrer) {
-            return "/";
-        }
-
-        // Extrait le chemin du referrer
-        try {
-            const referrerUrl = new URL(referrer);
-            const path = referrerUrl.pathname;
-
-            // Si le chemin n'est pas /connexion ou /inscription, rediriger vers ce chemin
-            if (
-                !path.includes("/connexion") &&
-                !path.includes("/inscription")
-            ) {
-                return path;
+            try {
+                const referrerUrl = new URL(referrer);
+                const path = referrerUrl.pathname;
+                if (path !== "/" && path !== "") {
+                    return path;
+                }
+            } catch (e) {
+                console.error("Erreur lors du parsing du referrer:", e);
             }
-        } catch (e) {
-            console.error("Erreur lors du parsing du referrer:", e);
         }
 
-        return "/";
+        // Par défaut, rediriger vers le configurateur
+        return "/configurateur";
     }
 
     const form = document.getElementById("loginForm");
