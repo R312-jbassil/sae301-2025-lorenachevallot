@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { getPocketBaseUrl } from "../lib/pocketbase";
 import supprimer from "../assets/supprimer.svg";
 import modifier from "../assets/modifier.svg";
 import dupliquer from "../assets/dupliquer.svg";
@@ -207,6 +208,12 @@ import DeleteConfirmModal from "../components/DeleteConfirmModal.astro";
 <script>
     console.log("[Creations] Script loaded");
 
+    // Configuration PocketBase
+    const POCKETBASE_URL =
+        import.meta.env.MODE === "development"
+            ? "http://127.0.0.1:8090"
+            : "https://sae-301.lorena-chevallot.fr:8084";
+
     async function initCreations() {
         console.log("[Creations] Initializing...");
 
@@ -238,7 +245,7 @@ import DeleteConfirmModal from "../components/DeleteConfirmModal.astro";
             // Récupérer les créations depuis PocketBase (collection modele)
             console.log("[Creations] Fetching from PocketBase...");
             const response = await fetch(
-                `http://127.0.0.1:8090/api/collections/modele/records?filter=id_utilisateur="${userId}"&sort=-created&expand=id_materiau_monture,id_materiau_branche`,
+                `${POCKETBASE_URL}/api/collections/modele/records?filter=id_utilisateur="${userId}"&sort=-created&expand=id_materiau_monture,id_materiau_branche`,
             );
 
             if (!response.ok) {
@@ -397,7 +404,7 @@ import DeleteConfirmModal from "../components/DeleteConfirmModal.astro";
 
         // Récupérer les données complètes du modèle depuis PocketBase
         fetch(
-            `http://127.0.0.1:8090/api/collections/modele/records/${recordId}?expand=id_materiau_monture,id_materiau_branche`,
+            `${POCKETBASE_URL}/api/collections/modele/records/${recordId}?expand=id_materiau_monture,id_materiau_branche`,
         )
             .then((res) => res.json())
             .then((record) => {
@@ -432,7 +439,7 @@ import DeleteConfirmModal from "../components/DeleteConfirmModal.astro";
 
         // Récupérer les données complètes du modèle depuis PocketBase
         fetch(
-            `http://127.0.0.1:8090/api/collections/modele/records/${modelData}?expand=id_materiau_monture,id_materiau_branche`,
+            `${POCKETBASE_URL}/api/collections/modele/records/${modelData}?expand=id_materiau_monture,id_materiau_branche`,
         )
             .then((res) => res.json())
             .then((record) => {
@@ -550,9 +557,7 @@ import DeleteConfirmModal from "../components/DeleteConfirmModal.astro";
     window.duplicateCreation = function (recordId) {
         console.log("[Action] Duplicating creation:", recordId);
         // Charger la création et créer une copie
-        fetch(
-            `http://127.0.0.1:8090/api/collections/modele/records/${recordId}`,
-        )
+        fetch(`${POCKETBASE_URL}/api/collections/modele/records/${recordId}`)
             .then((res) => res.json())
             .then((data) => {
                 console.log(
@@ -569,7 +574,7 @@ import DeleteConfirmModal from "../components/DeleteConfirmModal.astro";
 
                 // Créer la nouvelle création en base de données
                 return fetch(
-                    "http://127.0.0.1:8090/api/collections/modele/records",
+                    `${POCKETBASE_URL}/api/collections/modele/records`,
                     {
                         method: "POST",
                         headers: {
@@ -604,7 +609,7 @@ import DeleteConfirmModal from "../components/DeleteConfirmModal.astro";
             if (confirmed) {
                 try {
                     fetch(
-                        `http://127.0.0.1:8090/api/collections/modele/records/${recordId}`,
+                        `${POCKETBASE_URL}/api/collections/modele/records/${recordId}`,
                         {
                             method: "DELETE",
                         },

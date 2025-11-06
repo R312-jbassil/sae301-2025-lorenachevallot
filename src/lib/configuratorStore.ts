@@ -240,9 +240,8 @@ export async function saveToPocketBase(name: string): Promise<void> {
         // Si oui, proposer de modifier cette paire ou d'en créer une nouvelle.
         // Nous ferons la recherche après l'authentification PocketBase.
 
-        // Import PocketBase (si pas déjà importé)
-        const { default: PocketBase } = await import('pocketbase');
-        const pb = new PocketBase('http://127.0.0.1:8090');
+        // Import PocketBase depuis la configuration centralisée
+        const pb = (await import('./pocketbase')).default;
 
         // Récupérer l'ID utilisateur depuis les cookies
         function getCookie(name: string): string | null {

@@ -174,6 +174,12 @@ const colorMap: Record<string, string> = {
 </div>
 
 <script>
+    // Configuration PocketBase
+    const POCKETBASE_URL =
+        import.meta.env.MODE === "development"
+            ? "http://127.0.0.1:8090"
+            : "https://sae-301.lorena-chevallot.fr:8084";
+
     declare global {
         interface Window {
             viewCreation: (id: string) => void;
@@ -188,9 +194,7 @@ const colorMap: Record<string, string> = {
         // Charger la création dans le localStorage et rediriger vers le configurateur
         try {
             // Récupérer la création depuis PocketBase
-            fetch(
-                `http://localhost:8090/api/collections/sauvegarde/records/${id}`,
-            )
+            fetch(`${POCKETBASE_URL}/api/collections/sauvegarde/records/${id}`)
                 .then((res) => res.json())
                 .then((data) => {
                     // Sauvegarder dans localStorage
@@ -216,9 +220,7 @@ const colorMap: Record<string, string> = {
         console.log("Éditer la création:", id);
         // Charger la création et rediriger au configurateur
         try {
-            fetch(
-                `http://localhost:8090/api/collections/sauvegarde/records/${id}`,
-            )
+            fetch(`${POCKETBASE_URL}/api/collections/sauvegarde/records/${id}`)
                 .then((res) => res.json())
                 .then((data) => {
                     localStorage.setItem(
@@ -242,9 +244,7 @@ const colorMap: Record<string, string> = {
     window.duplicateCreation = function (id: string) {
         console.log("Dupliquer la création:", id);
         try {
-            fetch(
-                `http://localhost:8090/api/collections/sauvegarde/records/${id}`,
-            )
+            fetch(`${POCKETBASE_URL}/api/collections/sauvegarde/records/${id}`)
                 .then((res) => res.json())
                 .then((data) => {
                     // Charger dans le configurateur pour duplication
@@ -276,7 +276,7 @@ const colorMap: Record<string, string> = {
             if (confirmed) {
                 try {
                     fetch(
-                        `http://localhost:8090/api/collections/sauvegarde/records/${id}`,
+                        `${POCKETBASE_URL}/api/collections/sauvegarde/records/${id}`,
                         {
                             method: "DELETE",
                         },

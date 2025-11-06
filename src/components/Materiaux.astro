@@ -1,4 +1,6 @@
 ---
+import { getPocketBaseUrl } from "../lib/pocketbase";
+
 interface Materiau {
     id: string;
     libelle: string;
@@ -18,9 +20,8 @@ const { onMaterialsChange } = Astro.props;
 // Récupérer les matériaux depuis PocketBase
 let materials: Materiau[] = [];
 try {
-    const response = await fetch(
-        "http://127.0.0.1:8090/api/collections/materiau/records",
-    );
+    const pbUrl = getPocketBaseUrl();
+    const response = await fetch(`${pbUrl}/api/collections/materiau/records`);
     if (response.ok) {
         const data = await response.json();
         materials = data.items || [];

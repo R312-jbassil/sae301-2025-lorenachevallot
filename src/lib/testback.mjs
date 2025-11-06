@@ -1,7 +1,12 @@
 // testback.js
 import PocketBase from "pocketbase";
 
-const pb = new PocketBase("http://127.0.0.1:8090");
+// Déterminer l'URL de PocketBase en fonction de l'environnement
+const pbUrl = process.env.NODE_ENV === 'production'
+    ? 'https://sae-301.lorena-chevallot.fr:8084'
+    : 'http://127.0.0.1:8090';
+
+const pb = new PocketBase(pbUrl);
 
 async function main() {
     try {
