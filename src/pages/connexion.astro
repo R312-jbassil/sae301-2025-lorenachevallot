@@ -148,9 +148,9 @@ import Google from "../assets/google.svg";
             return "/";
         }
 
-        // Si le referrer est vide ou du même domaine, rediriger vers /configurateur
+        // Si le referrer est vide ou du même domaine, rediriger vers l'accueil
         if (referrer === "" || !referrer) {
-            return "/configurateur";
+            return "/";
         }
 
         // Extrait le chemin du referrer
@@ -169,7 +169,7 @@ import Google from "../assets/google.svg";
             console.error("Erreur lors du parsing du referrer:", e);
         }
 
-        return "/configurateur";
+        return "/";
     }
 
     const form = document.getElementById("loginForm");
