@@ -1,3 +1,5 @@
+import pb from './pocketbase.ts';
+
 // Store for configurator state management
 export interface ConfiguratorState {
     modelId?: string; // ID du modèle en cours d'édition
@@ -239,11 +241,6 @@ export async function saveToPocketBase(name: string): Promise<void> {
         // Vérifier si l'utilisateur possède déjà une paire identique (mêmes paramètres)
         // Si oui, proposer de modifier cette paire ou d'en créer une nouvelle.
         // Nous ferons la recherche après l'authentification PocketBase.
-
-        // Import PocketBase depuis la configuration centralisée
-        const { getPocketBaseUrl } = await import('./pocketbase');
-        const { default: PocketBase } = await import('pocketbase');
-        const pb = new PocketBase(getPocketBaseUrl());
 
         // Récupérer l'ID utilisateur depuis les cookies
         function getCookie(name: string): string | null {
