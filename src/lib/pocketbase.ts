@@ -8,3 +8,7 @@ const pbUrl = import.meta.env.MODE === 'production'
 const pb = new PocketBase(pbUrl);
 
 export default pb;
+
+export function getPocketBaseUrl(): string {
+    return pbUrl;
+}
