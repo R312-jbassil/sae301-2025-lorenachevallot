@@ -12,7 +12,8 @@ const { onColorsChange } = Astro.props;
 const colorPalette = [
     { name: "Noir", hex: "#000000" },
     { name: "Or", hex: "#D4AF37" },
-    { name: "Bleu", hex: "#1E3A8A" },
+    { name: "Bleu foncé", hex: "#1E3A8A" },
+    { name: "Bleu clair", hex: "#3B82F6" },
     { name: "Rouge", hex: "#EF4444" },
     { name: "Vert", hex: "#22C55E" },
     { name: "Violet", hex: "#6366F1" },
@@ -235,7 +236,8 @@ const colorPalette = [
             const colorMap: Record<string, string> = {
                 "#000000": "Noir",
                 "#D4AF37": "Or",
-                "#1E3A8A": "Bleu",
+                "#1E3A8A": "Bleu foncé",
+                "#3B82F6": "Bleu clair",
                 "#EF4444": "Rouge",
                 "#22C55E": "Vert",
                 "#6366F1": "Violet",
@@ -423,6 +425,87 @@ const colorPalette = [
                     }
                     emitVerresChange();
                 });
+            });
+
+            // Initialiser les couleurs depuis le localStorage au chargement
+            function initializeColors() {
+                try {
+                    const stored = localStorage.getItem("configurator_state");
+                    if (stored) {
+                        const state = JSON.parse(stored);
+                        if (state.couleurs) {
+                            console.log(
+                                "Initialisation des couleurs depuis localStorage:",
+                                state.couleurs,
+                            );
+
+                            // Chercher et mettre à jour les inputs hex correspondants
+                            // Chercher dans colorMap la clé hex correspondante
+                            const hexToColorNameMap: Record<string, string> =
+                                {};
+                            for (const [hex, name] of Object.entries(
+                                colorMap,
+                            )) {
+                                hexToColorNameMap[name] = hex;
+                            }
+
+                            if (state.couleurs.monture) {
+                                const hex =
+                                    hexToColorNameMap[state.couleurs.monture] ||
+                                    "#000000";
+                                if (montureHexInput)
+                                    montureHexInput.value = hex;
+                                if (montureColorPreview)
+                                    montureColorPreview.style.backgroundColor =
+                                        hex;
+                            }
+
+                            if (state.couleurs.branches) {
+                                const hex =
+                                    hexToColorNameMap[
+                                        state.couleurs.branches
+                                    ] || "#D4AF37";
+                                if (branchesHexInput)
+                                    branchesHexInput.value = hex;
+                                if (branchesColorPreview)
+                                    branchesColorPreview.style.backgroundColor =
+                                        hex;
+                            }
+
+                            if (state.couleurs.verres) {
+                                const hex =
+                                    hexToColorNameMap[state.couleurs.verres] ||
+                                    "#1E3A8A";
+                                if (verresHexInput) verresHexInput.value = hex;
+                                if (verresColorPreview)
+                                    verresColorPreview.style.backgroundColor =
+                                        hex;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.error(
+                        "Erreur lors de l'initialisation des couleurs:",
+                        e,
+                    );
+                }
+            }
+
+            // Appeler au chargement du DOM
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", initializeColors);
+            } else {
+                initializeColors();
+            }
+
+            // Aussi écouter les changements du localStorage
+            window.addEventListener("configurator-changed", (event: any) => {
+                if (event.detail && event.detail.couleurs) {
+                    console.log(
+                        "Mise à jour des couleurs depuis événement configurator-changed",
+                    );
+                    initializeColors();
+                }
             });
         </script>
     </div>

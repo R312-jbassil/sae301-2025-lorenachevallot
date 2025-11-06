@@ -1,0 +1,249 @@
+---
+interface Props {
+    titre?: string;
+    rating?: number;
+    avis?: number;
+    description?: string;
+    prix?: number;
+    prixOriginal?: number;
+    reduction?: number;
+    couleurMonture?: string;
+    couleurBranches?: string;
+    couleurVerres?: string;
+    finition?: string;
+    materiauxBranches?: string;
+    dimensions?: string;
+    enStock?: boolean;
+}
+
+const {
+    titre = "TaVue - Classique",
+    rating = 5,
+    avis = 127,
+    description = "Ultra légère, silencieuse, et flexible, son design sobre et élégant s'intègre parfaitement dans la vie urbaine, sans compromis sur le style. Entièrement personnalisable, la FLEX ONE vous suit partout — parce que vous êtes unique, et vos chaussures devraient l'être aussi.",
+    prix = 110,
+    prixOriginal = 145,
+    reduction = 24,
+    couleurMonture = "rouge",
+    couleurBranches = "bleu",
+    couleurVerres = "Classiques",
+    finition = "mat",
+    materiauxBranches = "acétate",
+    dimensions = "48-20-42",
+    enStock = true,
+} = Astro.props;
+---
+
+<div class="bg-white p-8">
+    <!-- Titre et Rating -->
+    <div class="mb-8">
+        <div class="flex items-center gap-2 mb-2">
+            <h1 class="text-3xl font-bold">{titre}</h1>
+            <div class="flex items-center gap-1">
+                <div class="rating rating-sm">
+                    {
+                        [...Array(5)].map((_, i) => (
+                            <input
+                                type="radio"
+                                name="rating-1"
+                                class={`mask mask-star-2 ${i < rating ? "bg-yellow-400" : "bg-gray-300"}`}
+                                disabled
+                            />
+                        ))
+                    }
+                </div>
+                <span class="text-gray-500 text-sm">({avis} avis)</span>
+            </div>
+        </div>
+        <p class="text-gray-600 text-sm leading-relaxed">
+            {description}
+        </p>
+    </div>
+
+    <!-- Prix -->
+    <div class="mb-8 pb-8 border-b-2">
+        <div class="flex items-baseline gap-3">
+            <span class="text-4xl font-bold text-black">{prix}€</span>
+            <span class="text-lg text-gray-400 line-through"
+                >{prixOriginal}€</span
+            >
+            <span class="badge badge-error text-white">-{reduction}%</span>
+        </div>
+    </div>
+
+    <!-- Caractéristiques -->
+    <div class="mb-8">
+        <h2 class="text-lg font-semibold mb-6">Caractéristiques</h2>
+
+        <!-- Couleur Monture -->
+        <div class="mb-6">
+            <p class="text-sm font-medium text-gray-600 mb-3">
+                Couleur Monture: <span class="font-bold text-gray-900"
+                    >{couleurMonture}</span
+                >
+            </p>
+
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Monture -->
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <p class="text-xs text-gray-500 mb-2">Monture</p>
+                    <p class="font-medium">Titanum</p>
+                </div>
+
+                <!-- Couleur Branches -->
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <p class="text-xs text-gray-500 mb-2">Couleur branches</p>
+                    <p class="font-medium">{couleurBranches}</p>
+                </div>
+
+                <!-- Finition -->
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <p class="text-xs text-gray-500 mb-2">Finition</p>
+                    <p class="font-medium">{finition}</p>
+                </div>
+
+                <!-- Couleur Verres -->
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <p class="text-xs text-gray-500 mb-2">Couleur verres</p>
+                    <p class="font-medium">{couleurVerres}</p>
+                </div>
+
+                <!-- Branches -->
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <p class="text-xs text-gray-500 mb-2">Branches</p>
+                    <p class="font-medium">{materiauxBranches}</p>
+                </div>
+
+                <!-- Dimensions -->
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <p class="text-xs text-gray-500 mb-2">Dimensions</p>
+                    <p class="font-medium">{dimensions}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alerte Stock -->
+    <div
+        class="alert alert-warning mb-8 border-2 border-orange-400 bg-orange-50"
+    >
+        <div class="flex items-start gap-3">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-orange-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 9v2m0 4v2m0 4v2m0-14v2m0 4v2m0 4v2m0-14v2m0 4v2m0 4v2"
+                ></path>
+            </svg>
+            <div>
+                <h3 class="font-bold text-orange-800">
+                    Dernières pièces disponibles !
+                </h3>
+                <div class="text-sm text-orange-700">
+                    Plus que 3 en stock à ce prix
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Boutons d'action -->
+    <div class="grid grid-cols-3 gap-3 mb-8">
+        <button
+            class="btn btn-dark btn-lg col-span-2 rounded-lg font-semibold text-white bg-black hover:bg-gray-900"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                ></path>
+            </svg>
+            Ajouter au panier
+        </button>
+
+        <button class="btn btn-outline btn-lg rounded-lg font-semibold">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+            >
+                <path d="M13.5 4.5L6 12m0 0l7.5 7.5M6 12h11a2 2 0 110 4H6"
+                ></path>
+            </svg>
+        </button>
+    </div>
+
+    <button
+        class="btn btn-ghost btn-lg w-full rounded-lg font-semibold border border-gray-300"
+    >
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            ></path>
+        </svg>
+        Personnaliser ce modèle
+    </button>
+
+    <!-- Livraison -->
+    <div class="mt-8 pt-8 border-t">
+        <div class="mb-4">
+            <p class="text-sm text-gray-600 mb-1">
+                <span class="font-semibold">Délais de livraison estimé:</span> 5
+                à 6 jours
+            </p>
+            <p class="text-xs text-gray-500">
+                Les livraisons en Corse peuvent nécessiter jusqu'à 1 semaine
+                supplémentaire.
+            </p>
+        </div>
+
+        <div
+            class="alert alert-success alert-sm bg-green-50 border-l-4 border-green-500"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 text-green-600"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+            >
+                <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"></path>
+            </svg>
+            <span class="text-sm font-medium text-green-700"
+                >Livraison gratuite pour cette commande !</span
+            >
+        </div>
+    </div>
+</div>
+
+<style>
+    .rating input {
+        cursor: default;
+    }
+</style>

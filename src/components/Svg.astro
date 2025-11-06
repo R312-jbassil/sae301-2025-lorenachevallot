@@ -86,22 +86,63 @@ const colorMap: Record<string, string> = {
 </svg>
 
 <script define:vars={{ colorMap }}>
+    console.log("ColorMap disponible:", colorMap);
+
     // Fonction pour mettre à jour les couleurs du SVG
     function updateSvgColors(colors) {
-        // Appliquer la couleur de la monture (rouge)
+        console.log("updateSvgColors appelée avec:", colors);
+        console.log("ColorMap contient:", Object.keys(colorMap));
+
+        // Appliquer la couleur de la monture
         if (colors.monture) {
-            const montureHex = colorMap[colors.monture] || colors.monture;
+            let montureHex = colorMap[colors.monture];
+            console.log(
+                "Recherche couleur monture:",
+                colors.monture,
+                "-> trouvée:",
+                montureHex,
+            );
+            if (!montureHex) {
+                console.warn(
+                    "Couleur monture non trouvée, utilisation valeur par défaut",
+                );
+                montureHex = "#000000";
+            }
             const monture = document.getElementById("monture");
+            console.log(
+                "Mise à jour monture:",
+                colors.monture,
+                "->",
+                montureHex,
+            );
             if (monture) {
                 monture.setAttribute("fill", montureHex);
             }
         }
 
-        // Appliquer la couleur des branches (bleu foncé)
+        // Appliquer la couleur des branches
         if (colors.branches) {
-            const branchesHex = colorMap[colors.branches] || colors.branches;
+            let branchesHex = colorMap[colors.branches];
+            console.log(
+                "Recherche couleur branches:",
+                colors.branches,
+                "-> trouvée:",
+                branchesHex,
+            );
+            if (!branchesHex) {
+                console.warn(
+                    "Couleur branches non trouvée, utilisation valeur par défaut",
+                );
+                branchesHex = "#000000";
+            }
             const brancheGauche = document.getElementById("branche-gauche");
             const brancheDroite = document.getElementById("branche-droite");
+            console.log(
+                "Mise à jour branches:",
+                colors.branches,
+                "->",
+                branchesHex,
+            );
             if (brancheGauche) {
                 brancheGauche.setAttribute("fill", branchesHex);
             }
@@ -110,11 +151,24 @@ const colorMap: Record<string, string> = {
             }
         }
 
-        // Appliquer la couleur des verres (bleu clair)
+        // Appliquer la couleur des verres
         if (colors.verres) {
-            const verresHex = colorMap[colors.verres] || colors.verres;
+            let verresHex = colorMap[colors.verres];
+            console.log(
+                "Recherche couleur verres:",
+                colors.verres,
+                "-> trouvée:",
+                verresHex,
+            );
+            if (!verresHex) {
+                console.warn(
+                    "Couleur verres non trouvée, utilisation valeur par défaut",
+                );
+                verresHex = "#CAC9F3";
+            }
             const verreGauche = document.getElementById("verre-gauche");
             const verreDroit = document.getElementById("verre-droit");
+            console.log("Mise à jour verres:", colors.verres, "->", verresHex);
 
             if (verreGauche) {
                 verreGauche.setAttribute("fill", verresHex);
@@ -144,6 +198,7 @@ const colorMap: Record<string, string> = {
 
     // Écouter les changements de l'état du configurateur
     window.addEventListener("configurator-changed", (event) => {
+        console.log("Événement configurator-changed reçu:", event.detail);
         if (event.detail && event.detail.couleurs) {
             updateSvgColors(event.detail.couleurs);
         }
@@ -153,9 +208,13 @@ const colorMap: Record<string, string> = {
     if (typeof window !== "undefined") {
         try {
             const stored = localStorage.getItem("configurator_state");
+            console.log("Lecture du localStorage configurator_state:", stored);
             if (stored) {
                 const state = JSON.parse(stored);
                 if (state.couleurs) {
+                    console.log(
+                        "Application des couleurs depuis le localStorage",
+                    );
                     updateSvgColors(state.couleurs);
                 }
             }
@@ -163,4 +222,40 @@ const colorMap: Record<string, string> = {
             console.error("Erreur lors du chargement des couleurs:", e);
         }
     }
+
+    // Écouter aussi les changements immédiatement (pour les cas où on est déjà sur la page)
+    window.addEventListener("storage", (event) => {
+        if (event.key === "configurator_state") {
+            console.log("Changement détecté dans configurator_state");
+            try {
+                const state = JSON.parse(event.newValue);
+                if (state && state.couleurs) {
+                    updateSvgColors(state.couleurs);
+                }
+            } catch (e) {
+                console.error("Erreur lors du traitement du changement:", e);
+            }
+        }
+    });
+
+    // Ajouter un délai pour s'assurer que le DOM est complètement chargé
+    document.addEventListener("DOMContentLoaded", () => {
+        try {
+            const stored = localStorage.getItem("configurator_state");
+            if (stored) {
+                const state = JSON.parse(stored);
+                if (state.couleurs) {
+                    console.log(
+                        "Application des couleurs après DOMContentLoaded",
+                    );
+                    updateSvgColors(state.couleurs);
+                }
+            }
+        } catch (e) {
+            console.error(
+                "Erreur lors du chargement des couleurs à DOMContentLoaded:",
+                e,
+            );
+        }
+    });
 </script>

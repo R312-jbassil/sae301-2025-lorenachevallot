@@ -12,7 +12,10 @@ import Panier from "../assets/panier.svg";
         <!-- Mobile & Tablet & Desktop Layout -->
         <div class="flex items-center justify-between w-full">
             <!-- Logo + Title (Always visible) -->
-            <div class="shrink-0 flex items-center gap-2 md:gap-3">
+            <a
+                href="/"
+                class="shrink-0 flex items-center gap-2 md:gap-3 hover:opacity-80 transition-opacity"
+            >
                 <img
                     src={Logo.src}
                     alt="TaVue Logo"
@@ -21,32 +24,32 @@ import Panier from "../assets/panier.svg";
                 <span class="text-lg md:text-2xl font-bold text-black"
                     >TaVue</span
                 >
-            </div>
+            </a>
 
             <!-- Navigation Menu - Hidden on mobile, visible from md -->
             <nav
                 class="hidden md:flex flex-1 justify-center gap-6 lg:gap-8 mx-6 lg:mx-8"
             >
                 <a
-                    href="#"
+                    href="/modeles"
                     class="text-sm lg:text-base font-medium text-black hover:text-gray-600 transition-colors duration-200"
                 >
                     PRODUITS
                 </a>
                 <a
-                    href="#"
+                    href="/"
                     class="text-sm lg:text-base font-medium text-black hover:text-gray-600 transition-colors duration-200"
                 >
                     MES CRÉATIONS
                 </a>
                 <a
-                    href="#"
+                    href="/configurateur"
                     class="text-sm lg:text-base font-medium text-black hover:text-gray-600 transition-colors duration-200"
                 >
                     PERSONNALISER
                 </a>
                 <a
-                    href="#"
+                    href="/"
                     class="text-sm lg:text-base font-medium text-black hover:text-gray-600 transition-colors duration-200"
                 >
                     AIDE
@@ -112,25 +115,25 @@ import Panier from "../assets/panier.svg";
             class="fixed md:hidden inset-0 top-[70px] bg-white flex-col gap-0 hidden overflow-y-auto"
         >
             <a
-                href="#"
+                href="/modeles"
                 class="text-lg font-medium text-black hover:text-gray-600 transition-colors duration-200 px-6 py-4 border-b border-gray-100 hover:bg-gray-50"
             >
                 PRODUITS
             </a>
             <a
-                href="#"
+                href="/"
                 class="text-lg font-medium text-black hover:text-gray-600 transition-colors duration-200 px-6 py-4 border-b border-gray-100 hover:bg-gray-50"
             >
                 MES CRÉATIONS
             </a>
             <a
-                href="#"
+                href="/configurateur"
                 class="text-lg font-medium text-black hover:text-gray-600 transition-colors duration-200 px-6 py-4 border-b border-gray-100 hover:bg-gray-50"
             >
                 PERSONNALISER
             </a>
             <a
-                href="#"
+                href="/"
                 class="text-lg font-medium text-black hover:text-gray-600 transition-colors duration-200 px-6 py-4 border-b border-gray-100 hover:bg-gray-50"
             >
                 AIDE

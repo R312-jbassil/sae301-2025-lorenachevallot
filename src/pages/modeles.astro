@@ -1,0 +1,106 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/card.astro";
+---
+
+<Layout title="Nos Modèles">
+    <!-- Section Titre -->
+    <div class="w-full bg-base-100 border-b border-base-300">
+        <div class="w-full mx-auto px-16 py-12">
+            <h1 class="text-3xl font-normal mb-3">
+                Nos <span class="text-primary">modèles</span>
+            </h1>
+            <p class="text-base-content/70 text-base">
+                Découvrez notre sélection de modèles de lunettes disponibles.
+            </p>
+        </div>
+    </div>
+
+    <!-- Contenu principal -->
+    <div class="w-full flex-1 bg-white">
+        <div class="w-full mx-auto px-16 py-12">
+            <!-- Grille de cartes -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Carte Lunettes Classiques -->
+                <Card
+                    title="Lunettes Classiques"
+                    price={149}
+                    monture="Noir"
+                    branches="Noir"
+                    verres="Transparent"
+                    modelId="classique"
+                />
+
+                <!-- Carte Lunettes Bleues -->
+                <Card
+                    title="Lunettes Bleues"
+                    price={159}
+                    monture="Bleu foncé"
+                    branches="Bleu foncé"
+                    verres="Bleu clair"
+                    modelId="bleu"
+                />
+
+                <!-- Carte Lunettes Or -->
+                <Card
+                    title="Lunettes Glamour"
+                    price={179}
+                    monture="Or"
+                    branches="Or"
+                    verres="Transparent"
+                    modelId="glamour"
+                />
+
+                <!-- Carte Lunettes Rose -->
+                <Card
+                    title="Lunettes Rose"
+                    price={149}
+                    monture="Rose"
+                    branches="Rose"
+                    verres="Transparent"
+                    modelId="rose"
+                />
+
+                <!-- Carte Lunettes Rouges -->
+                <Card
+                    title="Lunettes Rouges"
+                    price={169}
+                    monture="Rouge"
+                    branches="Rouge"
+                    verres="Transparent"
+                    modelId="rouge"
+                />
+
+                <!-- Carte Lunettes Vertes -->
+                <Card
+                    title="Lunettes Vertes"
+                    price={159}
+                    monture="Vert"
+                    branches="Vert"
+                    verres="Transparent"
+                    modelId="vert"
+                />
+
+                <!-- Carte Lunettes Violettes -->
+                <Card
+                    title="Lunettes Violettes"
+                    price={169}
+                    monture="Violet"
+                    branches="Violet"
+                    verres="Transparent"
+                    modelId="violet"
+                />
+
+                <!-- Carte Lunettes Grises -->
+                <Card
+                    title="Lunettes Grises"
+                    price={149}
+                    monture="Gris"
+                    branches="Gris"
+                    verres="Transparent"
+                    modelId="gris"
+                />
+            </div>
+        </div>
+    </div>
+</Layout>

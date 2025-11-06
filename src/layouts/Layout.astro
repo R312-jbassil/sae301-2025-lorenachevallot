@@ -14,10 +14,12 @@ import Footer from "../components/Footer.astro";
 	</head>
 
 	<body
-		class="min-h-screen bg-base-100 text-base-content font-sans flex flex-col"
+		class="min-h-screen bg-base-100 text-base-content font-sans flex flex-col justify-between"
 	>
-		<Header />
-		<slot />
+		<div class="flex flex-col flex-1">
+			<Header />
+			<slot />
+		</div>
 		<Footer />
 	</body>
 </html>

@@ -1,0 +1,322 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Visualisation from "../components/Visualisation.astro";
+import Details from "../components/Details.astro";
+import Card from "../components/card.astro";
+---
+
+<Layout title="Spécifique">
+    <!-- Section Titre -->
+    <div class="w-full bg-base-100 border-b border-base-300">
+        <div class="w-full mx-auto px-16 py-12">
+            <h1 class="text-3xl font-normal mb-3" id="model-title">
+                Détails du <span class="text-primary">modèle</span>
+            </h1>
+            <p class="text-base-content/70 text-base" id="model-price">
+                Consultez les informations détaillées de ce modèle de lunettes.
+            </p>
+        </div>
+    </div>
+
+    <!-- Contenu principal -->
+    <div class="w-full flex-1 bg-white">
+        <div class="w-full mx-auto px-16 py-12">
+            <!-- Deux colonnes équitables -->
+            <div class="grid grid-cols-2 gap-8">
+                <!-- Colonne gauche : Visualisation avec infos -->
+                <div class="flex flex-col gap-6">
+                    <div class="apercu-container-no-border">
+                        <!-- Badges -->
+                        <div class="flex gap-3 mb-6">
+                            <div class="badge badge-success badge-lg gap-2">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 16 16"
+                                    class="w-4 h-4"
+                                >
+                                    <path
+                                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.5-7.5a.5.5 0 0 0-.5.5v5.793L5.354 2.646a.5.5 0 1 0-.708.708l8 8a.5.5 0 0 0 .708 0l8-8a.5.5 0 0 0-.708-.708L12.5 8.293V1a.5.5 0 0 0-.5-.5z"
+                                    ></path>
+                                </svg>
+                                En stock
+                            </div>
+                            <div class="badge badge-outline badge-lg">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 16 16"
+                                    class="w-4 h-4"
+                                >
+                                    <path
+                                        d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+                                    ></path>
+                                </svg>
+                                42 personnes ont enregistré ce modèle cette semaine
+                            </div>
+                        </div>
+
+                        <!-- Visualisation -->
+                        <Visualisation />
+                    </div>
+                </div>
+
+                <!-- Colonne droite : Détails -->
+                <div class="flex flex-col gap-6 sticky-column">
+                    <!-- Colonne droite : Détails -->
+                    <div class="flex flex-col gap-6 sticky-column">
+                        <Details />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cartes de bénéfices en dessous -->
+            <div class="mt-16 grid grid-cols-3 gap-6">
+                <!-- Carte 1 -->
+                <div
+                    class="border-2 border-black rounded-xl p-6 text-center bg-base-100 hover:shadow-lg transition-shadow"
+                >
+                    <div class="flex justify-center mb-4">
+                        <div
+                            class="w-12 h-12 bg-primary rounded-full flex items-center justify-center"
+                        >
+                            <svg
+                                class="w-6 h-6 text-primary-content"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M13 6v2h4v11H7V8h4V6H6c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"
+                                ></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-base mb-2 text-base-content">
+                        Livraison rapide et offerte
+                    </h3>
+                    <p class="text-sm text-base-content/70">
+                        Offerte dès 120 € d'achat partout en France, y compris
+                        en colis relais.
+                    </p>
+                </div>
+
+                <!-- Carte 2 -->
+                <div
+                    class="border-2 border-black rounded-xl p-6 text-center bg-base-100 hover:shadow-lg transition-shadow"
+                >
+                    <div class="flex justify-center mb-4">
+                        <div
+                            class="w-12 h-12 bg-primary rounded-full flex items-center justify-center"
+                        >
+                            <svg
+                                class="w-6 h-6 text-primary-content"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"
+                                ></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-base mb-2 text-base-content">
+                        Service client réactif
+                    </h3>
+                    <p class="text-sm text-base-content/70">
+                        Une question ? On vous répond rapidement, par mail !
+                    </p>
+                </div>
+
+                <!-- Carte 3 -->
+                <div
+                    class="border-2 border-black rounded-xl p-6 text-center bg-base-100 hover:shadow-lg transition-shadow"
+                >
+                    <div class="flex justify-center mb-4">
+                        <div
+                            class="w-12 h-12 bg-primary rounded-full flex items-center justify-center"
+                        >
+                            <svg
+                                class="w-6 h-6 text-primary-content"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"
+                                ></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="font-semibold text-base mb-2 text-base-content">
+                        Satisfait ou remboursé
+                    </h3>
+                    <p class="text-sm text-base-content/70">
+                        30 jours pour changer d'avis. Retour simple et
+                        remboursement garanti.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Cartes de modèles similaires -->
+            <div class="mt-16">
+                <h2 class="text-2xl font-semibold mb-8">Modèles similaires</h2>
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+                >
+                    <!-- Exemples de cartes -->
+                    <Card
+                        title="Lunettes Classiques"
+                        price={149}
+                        monture="Noir"
+                        branches="Noir"
+                        verres="Transparent"
+                        modelId="classique"
+                    />
+                    <Card
+                        title="Lunettes Bleues"
+                        price={159}
+                        monture="Bleu foncé"
+                        branches="Bleu foncé"
+                        verres="Bleu clair"
+                        modelId="bleu"
+                    />
+                    <Card
+                        title="Lunettes Or"
+                        price={179}
+                        monture="Or"
+                        branches="Or"
+                        verres="Transparent"
+                        modelId="or"
+                    />
+                    <Card
+                        title="Lunettes Rose"
+                        price={149}
+                        monture="Rose"
+                        branches="Rose"
+                        verres="Transparent"
+                        modelId="rose"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        :global(.sticky-column) {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        :global(.apercu-container) {
+            background: white;
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        :global(.apercu-container-no-border) {
+            background: white;
+            border-radius: 12px;
+            padding: 28px;
+            border: none;
+            box-shadow: none;
+        }
+    </style>
+</Layout>
+
+<script>
+    // Fonction pour charger et appliquer les données du modèle
+    function loadModelData() {
+        const selectedModel = localStorage.getItem("selectedModel");
+        console.log("Données du localStorage:", selectedModel);
+        if (selectedModel) {
+            try {
+                const modelData = JSON.parse(selectedModel);
+                console.log("Modèle chargé:", modelData);
+
+                // Mettre à jour le titre
+                const titleElement = document.getElementById("model-title");
+                if (titleElement) {
+                    titleElement.innerHTML = `Détails du <span class="text-primary">${modelData.title}</span>`;
+                    console.log("Titre mis à jour:", modelData.title);
+                }
+
+                // Mettre à jour le prix
+                const priceElement = document.getElementById("model-price");
+                if (priceElement) {
+                    priceElement.textContent = `Prix: ${modelData.price}€`;
+                    console.log("Prix mis à jour:", modelData.price);
+                }
+
+                // Sauvegarder dans le configurator store
+                const configuratorState = {
+                    materiaux: {
+                        montureType: "Acétate de cellulose",
+                        branchesType: "Acétate de cellulose",
+                    },
+                    couleurs: {
+                        monture: modelData.monture || "Noir",
+                        branches: modelData.branches || "Noir",
+                        verres: modelData.verres || "Transparent",
+                    },
+                    tailles: {
+                        largeurVerres: 48,
+                        hauteurVerres: 20,
+                        largeurPont: 42,
+                    },
+                    finitions: {
+                        type: "Mat",
+                    },
+                    options: {
+                        emboutPersonnalises: false,
+                        charnieresFlexibles: false,
+                        gravurePersonnalisee: false,
+                    },
+                };
+                localStorage.setItem(
+                    "configurator_state",
+                    JSON.stringify(configuratorState),
+                );
+                console.log(
+                    "État du configurateur mis à jour:",
+                    configuratorState.couleurs,
+                );
+
+                // Émettre l'événement configurator-changed pour mettre à jour le SVG
+                console.log("Émission de l'événement configurator-changed");
+                window.dispatchEvent(
+                    new CustomEvent("configurator-changed", {
+                        detail: configuratorState,
+                    }),
+                );
+            } catch (error) {
+                console.error(
+                    "Erreur lors du chargement des données du modèle:",
+                    error,
+                );
+            }
+        } else {
+            console.log("Aucun modèle sélectionné dans le localStorage");
+        }
+    }
+
+    // Charger les données au chargement initial
+    document.addEventListener("DOMContentLoaded", () => {
+        console.log("DOMContentLoaded déclenché");
+        loadModelData();
+    });
+
+    // Charger les données quand la fenêtre reçoit le focus (cas où on clique sur une card et revient)
+    window.addEventListener("focus", () => {
+        console.log("Focus déclenché");
+        loadModelData();
+    });
+
+    // Charger les données immédiatement (au cas où le script se charge après le DOMContentLoaded)
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", loadModelData);
+    } else {
+        console.log("Document prêt, chargement immédiat du modèle");
+        loadModelData();
+    }
+</script>
